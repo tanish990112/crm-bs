@@ -1,0 +1,50 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id               Int       @id @default(autoincrement())
+  leadId           String    @unique
+  leadSourcer      String
+  linkedinUrl      String
+  employeeRatio    Decimal
+  leadSource       String
+  employeeCount    Int
+  createdAt        DateTime  @default(now())
+  company          String
+  website          String
+  industry         String
+  leadStatus       String
+  hourlyRate       Decimal
+  deployedCount    Int?
+  country          String
+  annualRevenue    Decimal
+  vendorManagement String
+  contact          Contact[]
+  event            Event[]
+}
+
+model Event {
+  id     Int    @id @default(autoincrement())
+  name   String
+  lead   Lead   @relation(fields: [leadId], references: [leadId])
+  leadId String
+}
+
+model Contact {
+  id               Int     @id @default(autoincrement())
+  lead             Lead    @relation(fields: [leadId], references: [leadId])
+  leadId           String
+  contactFirstName String
+  contactLastName  String
+  title            String
+  phone            String
+  email            String
+  skypeId          String?
+}
