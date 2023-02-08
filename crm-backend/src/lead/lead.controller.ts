@@ -22,7 +22,6 @@ export class LeadController {
       leadInfo: CreateLeadDto;
     },
   ): Promise<LeadModel> {
-    // leadInformation;
     const { leadInfo } = lead;
     return this.leadService.createLead(leadInfo);
   }

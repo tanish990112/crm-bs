@@ -15,6 +15,7 @@ export const LeadChangeObject = createParamDecorator(
       },
     };
     body.leadInfo = leadInfo;
+    console.log(body.leadInfo, '---------------->');
     return body;
   },
 );
