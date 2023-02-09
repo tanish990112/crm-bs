@@ -5,10 +5,6 @@ import { CreateContactDto, ListContactDto } from 'dto/contact/contact.dto';
 class LeadDataDto {
   @IsString()
   @ApiProperty()
-  leadSourcer: string;
-
-  @IsString()
-  @ApiProperty()
   linkedinUrl: string;
 
   @IsNumber()
@@ -62,14 +58,15 @@ class LeadDataDto {
   @IsString()
   @ApiProperty()
   description: string;
+
+  @IsNumber()
+  @ApiProperty()
+  leadSourcerUserId: number;
 }
 
 export class CreateLeadDto {
   @ApiProperty()
   leadId: string;
-
-  @ApiProperty()
-  leadSourcer: string;
 
   @ApiProperty()
   linkedinUrl: string;
@@ -106,6 +103,10 @@ export class CreateLeadDto {
 
   @ApiProperty()
   vendorManagement: string;
+
+  @IsNumber()
+  @ApiProperty()
+  leadSourcerUserId: number;
 
   contact: CreateContactDto;
 }
