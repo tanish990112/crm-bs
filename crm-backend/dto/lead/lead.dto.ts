@@ -54,37 +54,59 @@ class LeadDataDto {
   @IsString()
   @ApiProperty()
   vendorManagement: string;
+
+  @IsString()
+  @ApiProperty()
+  address: string;
+
+  @IsString()
+  @ApiProperty()
+  description: string;
 }
 
 export class CreateLeadDto {
   @ApiProperty()
   leadId: string;
+
   @ApiProperty()
   leadSourcer: string;
+
   @ApiProperty()
   linkedinUrl: string;
+
   @ApiProperty()
   employeeRatio: number;
+
   @ApiProperty()
   leadSource: string;
+
   @ApiProperty()
   employeeCount: number;
+
   @ApiProperty()
   company: string;
+
   @ApiProperty()
   website: string;
+
   @ApiProperty()
   industry: string;
+
   @ApiProperty()
   leadStatus: string;
+
   @ApiProperty()
   hourlyRate: number;
+
   @ApiProperty()
   country: string;
+
   @ApiProperty()
   annualRevenue: number;
+
   @ApiProperty()
   vendorManagement: string;
+
   contact: CreateContactDto;
 }
 

@@ -9,25 +9,28 @@ datasource db {
 }
 
 model Lead {
-  id               Int       @id @default(autoincrement())
-  leadId           String    @unique
-  leadSourcer      String
-  linkedinUrl      String
-  employeeRatio    Decimal
-  leadSource       String
-  employeeCount    Int
-  createdAt        DateTime  @default(now())
-  company          String
-  website          String
-  industry         String
-  leadStatus       String
-  hourlyRate       Decimal
-  deployedCount    Int?
-  country          String
-  annualRevenue    Decimal
-  vendorManagement String
-  contact          Contact[]
-  event            Event[]
+  id                Int          @id @default(autoincrement())
+  leadId            String       @unique
+  linkedinUrl       String
+  employeeRatio     Decimal
+  leadSource        String
+  employeeCount     Int
+  createdAt         DateTime     @default(now())
+  company           String
+  website           String
+  industry          String
+  leadStatus        String
+  hourlyRate        Decimal
+  deployedCount     Int?
+  country           String
+  annualRevenue     Decimal
+  vendorManagement  String
+  address           String       @default("N/A")
+  description       String       @default("N/A")
+  contact           Contact[]
+  event             Event[]
+  LeadSourcer       LeadSourcer? @relation(fields: [leadSourcerUserId], references: [userId])
+  leadSourcerUserId Int?
 }
 
 model Event {
@@ -47,4 +50,13 @@ model Contact {
   phone            String
   email            String
   skypeId          String?
+}
+
+model LeadSourcer {
+  userId   Int    @id @default(autoincrement())
+  name     String
+  email    String
+  phone    String
+  password String
+  lead     Lead[]
 }
