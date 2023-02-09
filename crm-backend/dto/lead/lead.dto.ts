@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsObject, IsString, IsNumber } from 'class-validator';
 import { CreateContactDto, ListContactDto } from 'dto/contact/contact.dto';
 
@@ -108,6 +108,8 @@ export class CreateLeadDto {
   @ApiProperty()
   leadSourcerUserId: number;
 
+  @IsObject()
+  @ApiPropertyOptional()
   contact: CreateContactDto;
 }
 
@@ -119,8 +121,4 @@ export class ListLeadDto {
   @IsObject()
   @ApiProperty()
   contactInfo: ListContactDto;
-}
-export class leadUniqueInput {
-  @ApiProperty()
-  leadId: string;
 }

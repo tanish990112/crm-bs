@@ -9,7 +9,7 @@ export class AdminService {
   constructor(private prisma: DbService) {}
 
   async getUsers(): Promise<UsersDto[] | null> {
-    return this.prisma.leadSourcer.findMany({
+    const users = this.prisma.leadSourcer.findMany({
       select: {
         email: true,
         name: true,
@@ -17,6 +17,7 @@ export class AdminService {
         phone: true,
       },
     });
+    return users;
   }
 
   async createUser(

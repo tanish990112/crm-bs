@@ -4,7 +4,7 @@ import { LeadChangeObject } from './lead.decorator';
 import { PaginateQuery } from 'dto/common/common.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { CreateLeadDto, leadUniqueInput, ListLeadDto } from 'dto/lead/lead.dto';
+import { CreateLeadDto, ListLeadDto } from 'dto/lead/lead.dto';
 
 @Controller('lead')
 export class LeadController {
@@ -19,8 +19,8 @@ export class LeadController {
 
   @Get('getLeadDetails')
   @ApiOkResponse({ type: CreateLeadDto })
-  getLeadDetails(@Query('leadId') query: leadUniqueInput): Promise<LeadModel> {
-    const response = this.leadService.getLeadDetails(query);
+  getLeadDetails(@Query('leadId') leadId: string): Promise<LeadModel> {
+    const response = this.leadService.getLeadDetails(leadId);
     return response;
   }
 
