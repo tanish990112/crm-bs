@@ -8,9 +8,18 @@ import { LeadService } from './lead.service';
 export class LeadController {
   constructor(private leadService: LeadService) {}
 
-  @Get('getLeads')
-  getLeads(@Query() query: Prisma.LeadWhereUniqueInput): Promise<LeadModel> {
+  @Get()
+  getLeads(
+    @Query() query: { skip: number; take: number },
+  ): Promise<LeadModel[]> {
     const response = this.leadService.getLeads(query);
+    return response;
+  }
+  @Get('getLeadDetails')
+  getLeadDetails(
+    @Query() query: Prisma.LeadWhereUniqueInput,
+  ): Promise<LeadModel> {
+    const response = this.leadService.getLeadDetails(query);
     return response;
   }
 

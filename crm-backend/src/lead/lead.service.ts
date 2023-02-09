@@ -6,7 +6,16 @@ import { Lead, Prisma } from '@prisma/client';
 export class LeadService {
   constructor(private prisma: DbService) {}
 
-  async getLeads(
+  async getLeads(paginateQuery: {
+    skip?: number;
+    take?: number;
+  }): Promise<Lead[] | null> {
+    return this.prisma.lead.findMany({
+      skip: paginateQuery?.skip,
+      take: paginateQuery?.take,
+    });
+  }
+  async getLeadDetails(
     leadWhereUniqueInput: Prisma.LeadWhereUniqueInput,
   ): Promise<Lead | null> {
     return this.prisma.lead.findUnique({
