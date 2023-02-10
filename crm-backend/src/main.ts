@@ -1,22 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { swaggerIntegration } from './common/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Bonami CRM-Backend')
-    .setDescription(
-      'This is a CRM server (Customer Relationship Management) of Bonami Software.',
-    )
-    .setVersion('1.0')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-
-  SwaggerModule.setup('/', app, document);
-
-  await app.listen(3000);
+  await swaggerIntegration(app);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
