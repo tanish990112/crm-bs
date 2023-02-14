@@ -35,7 +35,7 @@ export class LeadService {
         LeadSourcer: true,
         leadSourcerUserId: true,
         contact: true,
-        event: true,
+        activity: true,
       },
     });
   }
@@ -125,7 +125,7 @@ const getLeadInformation = async (
       LeadSourcer: true,
       leadSourcerUserId: true,
       contact: true,
-      event: true,
+      activity: true,
     },
   });
   return leadDetails;
