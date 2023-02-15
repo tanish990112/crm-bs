@@ -4,7 +4,7 @@ import {
   activity,
   createActivityDto,
   updateActivityDto,
-} from 'dto/activity/activity.dto';
+} from './dto/activity.dto';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { APIResponse } from 'src/common/response';
 import { Constants } from 'src/common/constants';

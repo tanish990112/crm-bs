@@ -1,10 +1,10 @@
 import { LeadService } from './lead.service';
 import { Lead as LeadModel } from '@prisma/client';
 import { LeadChangeObject } from './lead.decorator';
-import { PaginateQuery } from 'dto/common/common.dto';
+import { PaginateQuery } from '../common/common.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { CreateLeadDto, ListLeadDto } from 'dto/lead/lead.dto';
+import { CreateLeadDto, ListLeadDto } from './dto/lead.dto';
 
 @Controller('lead')
 export class LeadController {
