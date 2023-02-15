@@ -28,16 +28,22 @@ model Lead {
   address           String       @default("N/A")
   description       String       @default("N/A")
   contact           Contact[]
-  event             Event[]
+  activity          Activity[]
   LeadSourcer       LeadSourcer? @relation(fields: [leadSourcerUserId], references: [userId])
   leadSourcerUserId Int?
 }
 
-model Event {
-  id     Int    @id @default(autoincrement())
-  name   String
-  lead   Lead   @relation(fields: [leadId], references: [leadId])
-  leadId String
+model Activity {
+  id             Int         @id @default(autoincrement())
+  lead           Lead        @relation(fields: [leadId], references: [leadId])
+  leadId         String
+  description    String
+  typeOfActivity String
+  activityTime   DateTime    @default(now())
+  leadSourcer    LeadSourcer @relation(fields: [createdBy], references: [userId])
+  createdBy      Int
+  createdAt      DateTime?   @default(now())
+  modifiedAt     DateTime?   @default(now())
 }
 
 model Contact {
@@ -53,10 +59,11 @@ model Contact {
 }
 
 model LeadSourcer {
-  userId   Int    @id @default(autoincrement())
-  name     String
-  email    String
-  phone    String
-  password String
-  lead     Lead[]
+  userId     Int        @id @default(autoincrement())
+  name       String
+  email      String
+  phone      String
+  password   String
+  lead       Lead[]
+  activities Activity[]
 }

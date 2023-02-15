@@ -7,6 +7,7 @@ export const Constants = {
     ACCEPTED: StatusCodes.ACCEPTED,
     BAD_GATEWAY: StatusCodes.BAD_GATEWAY,
     CREATED: StatusCodes.CREATED,
+    INTERNAL_SERVER_ERROR: StatusCodes.INTERNAL_SERVER_ERROR,
   },
 
   messages: {
