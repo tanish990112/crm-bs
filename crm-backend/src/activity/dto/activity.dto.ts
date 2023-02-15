@@ -70,9 +70,3 @@ export class updateActivityDto {
   @IsDate()
   activityTime?: Date;
 }
-
-// export class updateActivityDto {
-//   @ApiProperty()
-//   @IsObject()
-//   activityInfo: updateDataActivityDto;
-// }
