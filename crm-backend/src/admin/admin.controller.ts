@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { UserDetailsDto, UsersDto } from './dto/users.dto';
+import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
 import { AdminService } from './admin.service';
 import { APIResponse } from 'src/common/response';
 import { Constants } from 'src/common/constants';
@@ -10,7 +10,7 @@ export class AdminController {
   constructor(private adminServices: AdminService) {}
 
   @Get('/users')
-  @ApiOkResponse({ type: [UsersDto] })
+  @ApiOkResponse({ type: [UserDetailsDto] })
   async getUsers(): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.adminServices.getUsers();
@@ -25,9 +25,9 @@ export class AdminController {
   }
 
   @Post('/createUsers')
-  @ApiCreatedResponse({ type: UsersDto })
+  @ApiCreatedResponse({ type: UserDetailsDto })
   async createUsers(
-    @Body() userInfoDetails: UserDetailsDto,
+    @Body() userInfoDetails: CreateUserDto,
   ): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.adminServices.createUser(

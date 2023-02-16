@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { ActivityService } from './activity.service';
 import {
-  activity,
-  createActivityDto,
-  updateActivityDto,
+  ActivityDetails,
+  CreateActivityDto,
+  UpdateActivityDto,
 } from './dto/activity.dto';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { APIResponse } from 'src/common/response';
@@ -14,8 +14,8 @@ export class ActivityController {
   constructor(private activityService: ActivityService) {}
 
   @Post('createActivity')
-  @ApiCreatedResponse({ type: activity })
-  async createEvents(@Body() activityInfo: createActivityDto) {
+  @ApiCreatedResponse({ type: ActivityDetails })
+  async createEvents(@Body() activityInfo: CreateActivityDto) {
     try {
       const { statusCode, message, data } =
         await this.activityService.createActivity(activityInfo);
@@ -30,7 +30,7 @@ export class ActivityController {
   }
 
   @Get('allActivity')
-  @ApiOkResponse({ type: [activity] })
+  @ApiOkResponse({ type: [ActivityDetails] })
   async getAllActivity(): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } =
@@ -46,7 +46,7 @@ export class ActivityController {
   }
 
   @Get('getActivityDetails')
-  @ApiOkResponse({ type: activity })
+  @ApiOkResponse({ type: ActivityDetails })
   async getActivityById(
     @Query('activityId') activityId: number,
   ): Promise<APIResponse | null> {
@@ -66,7 +66,7 @@ export class ActivityController {
   @Patch('updateActivity')
   async updateEvent(
     @Query('activityId') activityId: number,
-    @Body() toUpdate: updateActivityDto,
+    @Body() toUpdate: UpdateActivityDto,
   ) {
     try {
       const { statusCode, message, data } =

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { Prisma } from '@prisma/client';
-import { createActivityDto, updateActivityDto } from './dto/activity.dto';
+import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
 import { Constants } from '../common/constants';
 
 @Injectable()
 export class ActivityService {
   constructor(private prisma: DbService) {}
 
-  async createActivity(data: createActivityDto) {
+  async createActivity(data: CreateActivityDto) {
     try {
       const activityCreated = await this.prisma.activity.create({
         data,
@@ -86,7 +86,7 @@ export class ActivityService {
     }
   }
 
-  async updateActivity(id: number, data: updateActivityDto) {
+  async updateActivity(id: number, data: UpdateActivityDto) {
     try {
       data['modifiedAt'] = new Date();
       const activityUpdation = await this.prisma.activity.update({

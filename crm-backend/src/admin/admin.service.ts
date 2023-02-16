@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { UserDetailsDto } from './dto/users.dto';
+import { CreateUserDto } from './dto/users.dto';
 import { Config } from 'src/common/common.config';
 import * as bcrypt from 'bcrypt';
 import { Constants } from 'src/common/constants';
@@ -37,7 +37,7 @@ export class AdminService {
     }
   }
 
-  async createUser(data: UserDetailsDto) {
+  async createUser(data: CreateUserDto) {
     try {
       const checkUser = await this.prisma.leadSourcer.findFirst({
         where: {

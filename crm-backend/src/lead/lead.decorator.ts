@@ -7,9 +7,13 @@ export const LeadChangeObject = createParamDecorator(
     let body = request?.body;
     body.leadData.leadId = uuidv4();
     const { leadData, contactInfo } = body;
-
+    const leadSourcerUserId = leadData.leadSourcerUserId;
+    delete leadData.leadSourcerUserId;
     const leadInfo = {
       ...leadData,
+      leadSourcer: {
+        connect: { userId: leadSourcerUserId },
+      },
       contact: {
         create: { ...contactInfo },
       },

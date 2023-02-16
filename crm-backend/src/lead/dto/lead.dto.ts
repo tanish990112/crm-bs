@@ -1,16 +1,25 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsObject, IsString, IsNumber } from 'class-validator';
 import {
   CreateContactDto,
   ListContactDto,
 } from '../../contacts/dto/contact.dto';
 
+class LeadSourcerIdDto {
+  @IsNumber()
+  @ApiProperty()
+  userId: number;
+}
+class ConnectLeadSourcerDto {
+  connect: LeadSourcerIdDto;
+}
+
 class LeadDataDto {
   @IsString()
   @ApiProperty()
   linkedinUrl: string;
 
-  @IsNumber()
+  @IsString()
   @ApiProperty()
   employeeRatio: string;
 
@@ -67,53 +76,10 @@ class LeadDataDto {
   leadSourcerUserId: number;
 }
 
-class ConnectLeadSourcerDto {
-  connect: LeadSourcerIdDto;
-}
-
-class LeadSourcerIdDto {
-  @ApiProperty()
-  userId: number;
-}
-export class CreateLeadDto {
+export class CreateLeadDto extends LeadDataDto {
+  @IsString()
   @ApiProperty()
   leadId: string;
-
-  @ApiProperty()
-  linkedinUrl: string;
-
-  @ApiProperty()
-  employeeRatio: string;
-
-  @ApiProperty()
-  leadSource: string;
-
-  @ApiProperty()
-  employeeCount: number;
-
-  @ApiProperty()
-  company: string;
-
-  @ApiProperty()
-  website: string;
-
-  @ApiProperty()
-  industry: string;
-
-  @ApiProperty()
-  leadStatus: string;
-
-  @ApiProperty()
-  hourlyRate: number;
-
-  @ApiProperty()
-  country: string;
-
-  @ApiProperty()
-  annualRevenue: number;
-
-  @ApiProperty()
-  vendorManagement: string;
 
   @IsObject()
   @ApiProperty()

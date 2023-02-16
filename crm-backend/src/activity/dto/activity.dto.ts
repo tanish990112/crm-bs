@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
-export class activity {
+export class CreateActivityDto {
   @ApiProperty()
   @IsString()
   leadId: string;
@@ -21,7 +21,9 @@ export class activity {
   @ApiProperty()
   @IsNumber()
   createdBy: number;
+}
 
+export class ActivityDetails extends CreateActivityDto {
   @ApiProperty()
   @IsDate()
   createdAt: Date;
@@ -31,29 +33,7 @@ export class activity {
   modifiedAt: Date;
 }
 
-export class createActivityDto {
-  @ApiProperty()
-  @IsString()
-  leadId: string;
-
-  @ApiProperty()
-  @IsString()
-  description: string;
-
-  @ApiProperty()
-  @IsString()
-  typeOfActivity: string;
-
-  @ApiProperty()
-  @IsDate()
-  activityTime: Date;
-
-  @ApiProperty()
-  @IsNumber()
-  createdBy: number;
-}
-
-export class updateActivityDto {
+export class UpdateActivityDto {
   @ApiProperty()
   @IsString()
   leadId?: string;
