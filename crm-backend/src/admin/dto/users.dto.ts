@@ -14,7 +14,7 @@ export class UsersDto {
   name: string;
 }
 
-class ui {
+class UserDetailsDto {
   @ApiProperty()
   email: string;
 
@@ -28,12 +28,7 @@ class ui {
   password: string;
 }
 
-class us {
-  @ApiProperty()
-  userInfo: ui;
-}
-
 export class CreateUsersDto {
   @ApiProperty()
-  payload: us;
+  userInfo: UserDetailsDto;
 }
