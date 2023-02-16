@@ -44,10 +44,11 @@ export class AdminService {
           email: data.email,
         },
       });
-      if (checkUser.userId)
+
+      if (checkUser)
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
-          message: 'User with this email already exists',
+          message: Constants.messages.userExist,
           data: data,
         };
       const hashedPassword = await bcrypt.hash(data.password, 10);
