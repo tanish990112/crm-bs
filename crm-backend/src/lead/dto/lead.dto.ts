@@ -12,7 +12,7 @@ class LeadDataDto {
 
   @IsNumber()
   @ApiProperty()
-  employeeRatio: number;
+  employeeRatio: string;
 
   @IsString()
   @ApiProperty()
@@ -67,6 +67,14 @@ class LeadDataDto {
   leadSourcerUserId: number;
 }
 
+class ConnectLeadSourcerDto {
+  connect: LeadSourcerIdDto;
+}
+
+class LeadSourcerIdDto {
+  @ApiProperty()
+  userId: number;
+}
 export class CreateLeadDto {
   @ApiProperty()
   leadId: string;
@@ -75,7 +83,7 @@ export class CreateLeadDto {
   linkedinUrl: string;
 
   @ApiProperty()
-  employeeRatio: number;
+  employeeRatio: string;
 
   @ApiProperty()
   leadSource: string;
@@ -107,12 +115,12 @@ export class CreateLeadDto {
   @ApiProperty()
   vendorManagement: string;
 
-  @IsNumber()
+  @IsObject()
   @ApiProperty()
-  leadSourcerUserId: number;
+  leadSourcer: ConnectLeadSourcerDto;
 
   @IsObject()
-  @ApiPropertyOptional()
+  @ApiProperty()
   contact: CreateContactDto;
 }
 

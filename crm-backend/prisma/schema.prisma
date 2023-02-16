@@ -12,7 +12,7 @@ model Lead {
   id                Int         @id @default(autoincrement())
   leadId            String      @unique
   linkedinUrl       String
-  employeeRatio     Decimal
+  employeeRatio     String
   leadSource        String
   employeeCount     Int
   createdAt         DateTime    @default(now())
@@ -29,8 +29,9 @@ model Lead {
   description       String      @default("N/A")
   contact           Contact[]
   activity          Activity[]
-  LeadSourcer       LeadSourcer @relation(fields: [leadSourcerUserId], references: [userId])
+  leadSourcer       LeadSourcer @relation(fields: [leadSourcerUserId], references: [userId])
   leadSourcerUserId Int
+  accountStatus     Int         @default(0)
 }
 
 model Activity {
