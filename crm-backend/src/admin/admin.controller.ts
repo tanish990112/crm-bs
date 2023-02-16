@@ -19,7 +19,7 @@ export class AdminController {
   async createUsers(
     @Body() userInfoDetails: CreateUsersDto,
   ): Promise<UsersDto> {
-    const { userInfo } = userInfoDetails.payload;
+    const { userInfo } = userInfoDetails;
     console.log(userInfo);
     const response = this.adminServices.createUser(userInfo);
     return response;

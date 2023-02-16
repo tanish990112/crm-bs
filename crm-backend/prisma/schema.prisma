@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Lead {
-  id                Int          @id @default(autoincrement())
-  leadId            String       @unique
+  id                Int         @id @default(autoincrement())
+  leadId            String      @unique
   linkedinUrl       String
   employeeRatio     Decimal
   leadSource        String
   employeeCount     Int
-  createdAt         DateTime     @default(now())
+  createdAt         DateTime    @default(now())
   company           String
   website           String
   industry          String
@@ -25,12 +25,12 @@ model Lead {
   country           String
   annualRevenue     Decimal
   vendorManagement  String
-  address           String       @default("N/A")
-  description       String       @default("N/A")
+  address           String      @default("N/A")
+  description       String      @default("N/A")
   contact           Contact[]
   activity          Activity[]
-  LeadSourcer       LeadSourcer? @relation(fields: [leadSourcerUserId], references: [userId])
-  leadSourcerUserId Int?
+  LeadSourcer       LeadSourcer @relation(fields: [leadSourcerUserId], references: [userId])
+  leadSourcerUserId Int
 }
 
 model Activity {
@@ -42,8 +42,8 @@ model Activity {
   activityTime   DateTime    @default(now())
   leadSourcer    LeadSourcer @relation(fields: [createdBy], references: [userId])
   createdBy      Int
-  createdAt      DateTime?   @default(now())
-  modifiedAt     DateTime?   @default(now())
+  createdAt      DateTime    @default(now())
+  modifiedAt     DateTime    @default(now())
 }
 
 model Contact {
