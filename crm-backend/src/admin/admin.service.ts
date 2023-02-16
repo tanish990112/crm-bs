@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { UserDetailsDto, UsersDto } from './dto/users.dto';
+import { UserDetailsDto } from './dto/users.dto';
 import { Config } from 'src/common/common.config';
 import * as bcrypt from 'bcrypt';
 import { Constants } from 'src/common/constants';
@@ -8,16 +8,33 @@ import { Constants } from 'src/common/constants';
 export class AdminService {
   constructor(private prisma: DbService) {}
 
-  async getUsers(): Promise<UsersDto[] | null> {
-    const users = this.prisma.leadSourcer.findMany({
-      select: {
-        email: true,
-        name: true,
-        userId: true,
-        phone: true,
-      },
-    });
-    return users;
+  async getUsers() {
+    try {
+      const users = await this.prisma.leadSourcer.findMany({
+        select: {
+          email: true,
+          name: true,
+          userId: true,
+          phone: true,
+        },
+      });
+      if (users.length)
+        return {
+          statusCode: Constants.statusCodes.OK,
+          message: Constants.messages.success,
+          data: users,
+        };
+      else {
+        return {
+          statusCode: Constants.statusCodes.NOT_FOUND,
+          message: Constants.messages.failure,
+          data: null,
+        };
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   async createUser(data: UserDetailsDto) {
@@ -37,13 +54,20 @@ export class AdminService {
       data.password = hashedPassword;
       const user = await this.prisma.leadSourcer.create({ data });
       delete user.password;
+      if (!user) {
+        return {
+          statusCode: Constants.statusCodes.BAD_GATEWAY,
+          message: Constants.messages.failure,
+          data: null,
+        };
+      }
       return {
-        statusCode: Constants.statusCodes.BAD_GATEWAY,
-        message: 'User with this email already exists',
+        statusCode: Constants.statusCodes.OK,
+        message: Constants.messages.success,
         data: user,
       };
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       throw error;
     }
   }

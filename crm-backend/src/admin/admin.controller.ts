@@ -11,14 +11,24 @@ export class AdminController {
 
   @Get('/users')
   @ApiOkResponse({ type: [UsersDto] })
-  async getUsers(): Promise<UsersDto[]> {
-    const response = this.adminServices.getUsers();
-    return response;
+  async getUsers(): Promise<APIResponse | null> {
+    try {
+      const { statusCode, message, data } = await this.adminServices.getUsers();
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
+    }
   }
 
   @Post('/createUsers')
   @ApiCreatedResponse({ type: UsersDto })
-  async createUsers(@Body() userInfoDetails: UserDetailsDto) {
+  async createUsers(
+    @Body() userInfoDetails: UserDetailsDto,
+  ): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.adminServices.createUser(
         userInfoDetails,
