@@ -1,6 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsObject, IsString, IsNumber } from 'class-validator';
-import { CreateContactDto, ListContactDto } from 'dto/contact/contact.dto';
+import {
+  CreateContactDto,
+  ListContactDto,
+} from '../../contacts/dto/contact.dto';
 
 class LeadDataDto {
   @IsString()
