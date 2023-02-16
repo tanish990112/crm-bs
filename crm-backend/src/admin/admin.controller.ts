@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { CreateUsersDto, UsersDto } from './dto/users.dto';
+import { UserDetailsDto, UsersDto } from './dto/users.dto';
 import { AdminService } from './admin.service';
+import { APIResponse } from 'src/common/response';
+import { Constants } from 'src/common/constants';
 
 @Controller('admin')
 export class AdminController {
@@ -9,20 +11,36 @@ export class AdminController {
 
   @Get('/users')
   @ApiOkResponse({ type: [UsersDto] })
-  async getUsers(): Promise<UsersDto[]> {
-    const response = this.adminServices.getUsers();
-    return response;
+  async getUsers(): Promise<APIResponse | null> {
+    try {
+      const { statusCode, message, data } = await this.adminServices.getUsers();
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
+    }
   }
 
   @Post('/createUsers')
-  @ApiCreatedResponse({ type: CreateUsersDto })
+  @ApiCreatedResponse({ type: UsersDto })
   async createUsers(
-    @Body() userInfoDetails: CreateUsersDto,
-  ): Promise<UsersDto> {
-    const { userInfo } = userInfoDetails;
-    console.log(userInfo);
-    const response = this.adminServices.createUser(userInfo);
-    return response;
+    @Body() userInfoDetails: UserDetailsDto,
+  ): Promise<APIResponse | null> {
+    try {
+      const { statusCode, message, data } = await this.adminServices.createUser(
+        userInfoDetails,
+      );
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
+    }
   }
 
   @Get('/config')

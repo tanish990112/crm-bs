@@ -62,8 +62,8 @@ model Contact {
 model LeadSourcer {
   userId     Int        @id @default(autoincrement())
   name       String
-  email      String
-  phone      String
+  email      String     @unique
+  phone      String     @unique
   password   String
   lead       Lead[]
   activities Activity[]
