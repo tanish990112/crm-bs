@@ -9,7 +9,7 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { APIResponse } from 'src/common/response';
 import { Constants } from 'src/common/constants';
 
-@Controller('activities')
+@Controller('activity')
 export class ActivityController {
   constructor(private activityService: ActivityService) {}
 

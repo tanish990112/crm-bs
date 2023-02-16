@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { Prisma } from '@prisma/client';
-import { updateActivityDto } from './dto/activity.dto';
+import { createActivityDto, updateActivityDto } from './dto/activity.dto';
 import { Constants } from '../common/constants';
 
 @Injectable()
 export class ActivityService {
   constructor(private prisma: DbService) {}
 
-  async createActivity(data: Prisma.ActivityCreateInput) {
+  async createActivity(data: createActivityDto) {
     try {
       const activityCreated = await this.prisma.activity.create({
         data,
@@ -108,7 +108,7 @@ export class ActivityService {
           data: data,
         };
     } catch (error) {
-      console.log(error.message, '--------------');
+      console.log(error.message, 'Error Message');
       throw error;
     }
   }

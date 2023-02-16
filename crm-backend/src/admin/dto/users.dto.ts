@@ -14,7 +14,7 @@ export class UsersDto {
   name: string;
 }
 
-class UserDetailsDto {
+export class UserDetailsDto {
   @ApiProperty()
   email: string;
 
