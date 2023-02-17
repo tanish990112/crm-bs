@@ -1,7 +1,7 @@
+import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { CreateUserDto } from './dto/users.dto';
-import * as bcrypt from 'bcrypt';
 import { Constants } from 'src/common/constants';
 @Injectable()
 export class AdminService {
