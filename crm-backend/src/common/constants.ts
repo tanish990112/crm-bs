@@ -15,5 +15,6 @@ export const Constants = {
     failure: 'failure',
     somethingWentWrong: 'Something went wrong',
     internalSeverError: 'Internal Server Error',
+    userExist: 'User with this email already exists',
   },
 };
