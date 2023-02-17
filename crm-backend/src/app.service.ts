@@ -1,4 +1,37 @@
 import { Injectable } from '@nestjs/common';
+import { DbService } from './db/db.service';
+import { Constants } from 'src/common/constants';
 
 @Injectable()
-export class AppService {}
+export class AppService {
+  constructor(private prisma: DbService) {}
+  async getConfig() {
+    try {
+      const configData = await this.prisma.config.findMany();
+
+      const config = {};
+
+      for await (const conf of configData) {
+        if (config.hasOwnProperty(conf.type)) {
+          config[conf.type].push(conf);
+        } else {
+          config[conf.type] = [conf];
+        }
+      }
+      if (!Object.keys(config).length) {
+        return {
+          statusCode: Constants.statusCodes.NOT_FOUND,
+          message: Constants.messages.failure,
+          data: null,
+        };
+      }
+      return {
+        statusCode: Constants.statusCodes.OK,
+        message: Constants.messages.success,
+        data: config,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+}

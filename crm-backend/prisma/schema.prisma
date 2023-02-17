@@ -68,3 +68,11 @@ model LeadSourcer {
   lead       Lead[]
   activities Activity[]
 }
+
+model Config {
+  id          Int     @id @default(autoincrement())
+  status      Int     @default(1)
+  type        String
+  label       String  @unique
+  information String?
+}

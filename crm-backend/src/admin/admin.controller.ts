@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
 import { AdminService } from './admin.service';
-import { APIResponse } from 'src/common/response';
 import { Constants } from 'src/common/constants';
+import { APIResponse } from 'src/common/response';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('admin')
 export class AdminController {
@@ -41,11 +41,5 @@ export class AdminController {
         null,
       );
     }
-  }
-
-  @Get('/config')
-  async getConfigs() {
-    const response = this.adminServices.getConfig();
-    return response;
   }
 }

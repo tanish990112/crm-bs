@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { CreateUserDto } from './dto/users.dto';
-import { Config } from 'src/common/common.config';
 import * as bcrypt from 'bcrypt';
 import { Constants } from 'src/common/constants';
 @Injectable()
@@ -70,9 +69,5 @@ export class AdminService {
       console.log(error.message);
       throw error;
     }
-  }
-
-  async getConfig(): Promise<any> {
-    return Config;
   }
 }

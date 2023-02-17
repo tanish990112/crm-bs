@@ -1,10 +1,11 @@
 import { LeadService } from './lead.service';
-import { Lead as LeadModel } from '@prisma/client';
+import { Constants } from 'src/common/constants';
+import { APIResponse } from 'src/common/response';
 import { LeadChangeObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
+import { CreateLeadDto, ListLeadDto } from './dto/lead.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { CreateLeadDto, ListLeadDto } from './dto/lead.dto';
 
 @Controller('lead')
 export class LeadController {
@@ -12,16 +13,39 @@ export class LeadController {
 
   @Get('getLeads')
   @ApiOkResponse({ type: [CreateLeadDto] })
-  getLeads(@Query('query') query: PaginateQuery): Promise<LeadModel[]> {
-    const response = this.leadService.getLeads(query);
-    return response;
+  async getLeads(
+    @Query('query') query: PaginateQuery,
+  ): Promise<APIResponse | null> {
+    try {
+      const { statusCode, message, data } = await this.leadService.getLeads(
+        query,
+      );
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
+    }
   }
 
   @Get('getLeadDetails')
   @ApiOkResponse({ type: CreateLeadDto })
-  getLeadDetails(@Query('leadId') leadId: string): Promise<LeadModel> {
-    const response = this.leadService.getLeadDetails(leadId);
-    return response;
+  async getLeadDetails(
+    @Query('leadId') leadId: string,
+  ): Promise<APIResponse | null> {
+    try {
+      const { statusCode, message, data } =
+        await this.leadService.getLeadDetails(leadId);
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
+    }
   }
 
   @Post('addLead')
@@ -29,7 +53,18 @@ export class LeadController {
   async createLead(
     @Body() lead: ListLeadDto,
     @LeadChangeObject() leadChangeObject: CreateLeadDto,
-  ): Promise<LeadModel> {
-    return this.leadService.createLead(leadChangeObject);
+  ): Promise<APIResponse | null> {
+    try {
+      const { statusCode, message, data } = await this.leadService.createLead(
+        leadChangeObject,
+      );
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
+    }
   }
 }
