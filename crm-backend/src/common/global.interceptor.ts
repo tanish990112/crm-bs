@@ -22,9 +22,9 @@ export class GlobalInterceptor implements NestInterceptor {
       .pipe(
         tap(() =>
           console.log(
-            `${request.method} ${request.path}  -----------------> ${
+            `\x1b[92m${request.method} ${request.path}  -----------------> ${
               Date.now() - now
-            }ms`,
+            }ms  \x1b[0m`,
           ),
         ),
       );
