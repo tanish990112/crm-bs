@@ -17,7 +17,7 @@ export class ActivityService {
       if (activityCreated.id) {
         return {
           statusCode: Constants.statusCodes.CREATED,
-          message: Constants.messages.success,
+          message: Constants.messages.SUCCESS,
           data: activityCreated,
         };
       } else {
@@ -42,7 +42,7 @@ export class ActivityService {
       if (allActivities.length !== 0) {
         return {
           statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.success,
+          message: Constants.messages.SUCCESS,
           data: allActivities,
         };
       } else {
@@ -71,7 +71,7 @@ export class ActivityService {
       if (eventData && eventData.id)
         return {
           statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.success,
+          message: Constants.messages.SUCCESS,
           data: eventData,
         };
       else
@@ -98,7 +98,7 @@ export class ActivityService {
       if (activityUpdation.id)
         return {
           statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.success,
+          message: Constants.messages.SUCCESS,
           data: activityUpdation,
         };
       else

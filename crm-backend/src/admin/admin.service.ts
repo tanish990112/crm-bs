@@ -20,7 +20,7 @@ export class AdminService {
       if (users.length)
         return {
           statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.success,
+          message: Constants.messages.SUCCESS,
           data: users,
         };
       else {
@@ -63,7 +63,7 @@ export class AdminService {
       }
       return {
         statusCode: Constants.statusCodes.OK,
-        message: Constants.messages.success,
+        message: Constants.messages.SUCCESS,
         data: user,
       };
     } catch (error) {

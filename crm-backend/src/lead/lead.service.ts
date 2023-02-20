@@ -47,7 +47,7 @@ export class LeadService {
       }
       return {
         statusCode: Constants.statusCodes.OK,
-        message: Constants.messages.success,
+        message: Constants.messages.SUCCESS,
         data: leadsData,
       };
     } catch (error) {
@@ -64,14 +64,14 @@ export class LeadService {
 
       if (!leadInfo) {
         return {
-          statusCode: Constants.statusCodes.NOT_FOUND,
-          message: Constants.messages.failure,
+          statusCode: Constants.statusCodes.OK,
+          message: Constants.messages.NO_LEADS,
           data: null,
         };
       }
       return {
         statusCode: Constants.statusCodes.OK,
-        message: Constants.messages.success,
+        message: Constants.messages.SUCCESS,
         data: leadInfo,
       };
     } catch (error) {
@@ -93,7 +93,7 @@ export class LeadService {
       }
       return {
         statusCode: Constants.statusCodes.OK,
-        message: Constants.messages.success,
+        message: Constants.messages.SUCCESS,
         data: createLead,
       };
     } catch (error) {

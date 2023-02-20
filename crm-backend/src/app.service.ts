@@ -27,7 +27,7 @@ export class AppService {
       }
       return {
         statusCode: Constants.statusCodes.OK,
-        message: Constants.messages.success,
+        message: Constants.messages.SUCCESS,
         data: config,
       };
     } catch (error) {
