@@ -1,5 +1,5 @@
-import { IsNumber } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PaginateQuery {
   @IsNumber()
@@ -9,4 +9,14 @@ export class PaginateQuery {
   @IsNumber()
   @ApiPropertyOptional()
   take?: number;
+}
+
+export class Login {
+  @IsString()
+  @ApiProperty()
+  email: string;
+
+  @IsString()
+  @ApiProperty()
+  password: string;
 }

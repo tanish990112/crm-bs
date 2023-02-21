@@ -52,6 +52,7 @@ export class AdminService {
         };
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword;
+      console.log(data);
       const user = await this.prisma.leadSourcer.create({ data });
       delete user.password;
       if (!user) {

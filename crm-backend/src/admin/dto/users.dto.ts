@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 class Users {
   @ApiProperty()
@@ -18,4 +18,7 @@ export class CreateUserDto extends Users {
 export class UserDetailsDto extends Users {
   @ApiProperty()
   userId: number;
+
+  @ApiPropertyOptional()
+  token?: string;
 }

@@ -8,6 +8,7 @@ export const Constants = {
     BAD_GATEWAY: StatusCodes.BAD_GATEWAY,
     CREATED: StatusCodes.CREATED,
     INTERNAL_SERVER_ERROR: StatusCodes.INTERNAL_SERVER_ERROR,
+    FORBIDDEN: StatusCodes.FORBIDDEN,
   },
 
   messages: {
@@ -17,5 +18,6 @@ export const Constants = {
     internalSeverError: 'Internal Server Error',
     userExist: 'User with this email already exists',
     NO_LEADS: 'No Leads Were Found.',
+    LOGIN_FAILED: 'Email Or Password is incorrect.',
   },
 };
