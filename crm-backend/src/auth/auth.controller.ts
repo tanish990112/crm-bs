@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiCreatedResponse } from '@nestjs/swagger';
-import { UserDetailsDto } from 'src/admin/dto/users.dto';
 import { Login } from 'src/common/common.dto';
 import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
-import { AuthService } from './auth.service';
+import { ApiCreatedResponse } from '@nestjs/swagger';
+import { UserDetailsDto } from 'src/admin/dto/users.dto';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
@@ -31,7 +31,6 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @Get('/protect')
   getProtect() {
-    console.log('ehheh');
     return true;
   }
 }
