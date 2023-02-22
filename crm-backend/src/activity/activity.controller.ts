@@ -1,19 +1,29 @@
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
-import { ActivityService } from './activity.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ActivityDetails,
   CreateActivityDto,
   UpdateActivityDto,
 } from './dto/activity.dto';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { APIResponse } from 'src/common/response';
+import { AuthGuard } from '@nestjs/passport';
 import { Constants } from 'src/common/constants';
+import { APIResponse } from 'src/common/response';
+import { ActivityService } from './activity.service';
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('activity')
 export class ActivityController {
   constructor(private activityService: ActivityService) {}
 
   @Post('createActivity')
+  @UseGuards(AuthGuard('jwt'))
   @ApiCreatedResponse({ type: ActivityDetails })
   async createEvents(@Body() activityInfo: CreateActivityDto) {
     try {
@@ -30,6 +40,7 @@ export class ActivityController {
   }
 
   @Get('allActivity')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOkResponse({ type: [ActivityDetails] })
   async getAllActivity(): Promise<APIResponse | null> {
     try {
@@ -46,6 +57,7 @@ export class ActivityController {
   }
 
   @Get('getActivityDetails')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOkResponse({ type: ActivityDetails })
   async getActivityById(
     @Query('activityId') activityId: number,
@@ -64,6 +76,7 @@ export class ActivityController {
   }
 
   @Patch('updateActivity')
+  @UseGuards(AuthGuard('jwt'))
   async updateEvent(
     @Query('activityId') activityId: number,
     @Body() toUpdate: UpdateActivityDto,

@@ -1,11 +1,12 @@
 import { LeadService } from './lead.service';
+import { AuthGuard } from '@nestjs/passport';
 import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
 import { LeadChangeObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
 import { CreateLeadDto, ListLeadDto } from './dto/lead.dto';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 
 @Controller('lead')
 export class LeadController {
@@ -13,6 +14,7 @@ export class LeadController {
 
   @Get('getLeads')
   @ApiOkResponse({ type: [CreateLeadDto] })
+  @UseGuards(AuthGuard('jwt'))
   async getLeads(
     @Query('query') query: PaginateQuery,
   ): Promise<APIResponse | null> {
@@ -32,6 +34,7 @@ export class LeadController {
 
   @Get('getLeadDetails')
   @ApiOkResponse({ type: CreateLeadDto })
+  @UseGuards(AuthGuard('jwt'))
   async getLeadDetails(
     @Query('leadId') leadId: string,
   ): Promise<APIResponse | null> {
@@ -50,6 +53,7 @@ export class LeadController {
 
   @Post('addLead')
   @ApiCreatedResponse({ type: CreateLeadDto })
+  @UseGuards(AuthGuard('jwt'))
   async createLead(
     @Body() lead: ListLeadDto,
     @LeadChangeObject() leadChangeObject: CreateLeadDto,

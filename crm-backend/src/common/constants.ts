@@ -9,6 +9,7 @@ export const Constants = {
     CREATED: StatusCodes.CREATED,
     INTERNAL_SERVER_ERROR: StatusCodes.INTERNAL_SERVER_ERROR,
     FORBIDDEN: StatusCodes.FORBIDDEN,
+    UNAUTHORIZED: StatusCodes.UNAUTHORIZED,
   },
 
   messages: {
