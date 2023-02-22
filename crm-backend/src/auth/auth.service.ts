@@ -47,6 +47,14 @@ export class AuthService {
         userDetails.password,
         userData.password,
       );
+
+      if (!passwordMatch) {
+        return {
+          statusCode: Constants.statusCodes.OK,
+          message: Constants.messages.LOGIN_FAILED,
+          data: null,
+        };
+      }
       const responseData = {
         ...userData,
         token: null,
