@@ -7,14 +7,17 @@ import { PaginateQuery } from '../common/common.dto';
 import { CreateLeadDto, ListLeadDto } from './dto/lead.dto';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('lead')
 export class LeadController {
   constructor(private leadService: LeadService) {}
 
   @Get('getLeads')
-  @ApiOkResponse({ type: [CreateLeadDto] })
+  @Roles(Role.ADMIN)
   @UseGuards(AuthGuard('jwt'))
+  @ApiOkResponse({ type: [CreateLeadDto] })
   async getLeads(
     @Query('query') query: PaginateQuery,
   ): Promise<APIResponse | null> {
