@@ -1,8 +1,8 @@
+import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { Prisma } from '@prisma/client';
-import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
 import { Constants } from '../common/constants';
+import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
 
 @Injectable()
 export class ActivityService {

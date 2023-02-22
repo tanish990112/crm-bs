@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
 import { Login } from 'src/common/common.dto';
 import { DbService } from 'src/db/db.service';
 import { Constants } from 'src/common/constants';
@@ -69,6 +69,9 @@ export class AuthService {
         message: Constants.messages.SUCCESS,
         data: responseData,
       };
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+      throw error;
+    }
   }
 }
