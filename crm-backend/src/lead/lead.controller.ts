@@ -18,6 +18,7 @@ export class LeadController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard('jwt'))
   @ApiOkResponse({ type: [CreateLeadDto] })
+  @UseGuards(AuthGuard('jwt'))
   async getLeads(
     @Query('query') query: PaginateQuery,
   ): Promise<APIResponse | null> {

@@ -17,16 +17,16 @@ export class GlobalInterceptor implements NestInterceptor {
 
     const now = Date.now();
 
-    return next
-      .handle()
-      .pipe(
-        tap(() =>
-          console.log(
-            `\x1b[92m${request.method} ${request.path}  -----------------> ${
-              Date.now() - now
-            }ms  \x1b[0m`,
-          ),
-        ),
-      );
+    return next.handle().pipe(
+      tap((data) => {
+        const response = context.switchToHttp().getResponse();
+        response.statusCode = data.status;
+        console.log(
+          `\x1b[92m${request.method} ${request.path}  -----------------> ${
+            Date.now() - now
+          }ms  \x1b[0m`,
+        );
+      }),
+    );
   }
 }

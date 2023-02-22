@@ -49,6 +49,14 @@ export class AuthService {
         userData.password,
       );
 
+      if (!passwordMatch) {
+        return {
+          statusCode: Constants.statusCodes.OK,
+          message: Constants.messages.LOGIN_FAILED,
+          data: null,
+        };
+      }
+
       if (userData && passwordMatch) {
         const payload = { username: userData.email, id: userData.userId };
         userData.token = this.jwtService.sign(payload);
