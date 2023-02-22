@@ -14,7 +14,7 @@ export class AuthService {
     id: number;
   }): Promise<any> {
     try {
-      const userData = await this.prisma.leadSourcer.findUniqueOrThrow({
+      const userData = await this.prisma.leadSourcer.findUnique({
         where: { email: userDetails.username },
       });
       if (!userData) {
@@ -24,7 +24,6 @@ export class AuthService {
           data: null,
         };
       }
-
       return userData;
     } catch (error) {
       throw error;

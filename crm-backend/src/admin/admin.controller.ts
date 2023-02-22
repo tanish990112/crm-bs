@@ -5,6 +5,9 @@ import { APIResponse } from 'src/common/response';
 import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('admin')
 export class AdminController {
