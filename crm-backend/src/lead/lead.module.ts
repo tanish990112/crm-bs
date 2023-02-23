@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { DbModule } from '../db/db.module';
 import { LeadService } from './lead.service';
-import { LeadController } from './lead.controller';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { LeadController } from './lead.controller';
 
 @Module({
   imports: [DbModule],

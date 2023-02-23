@@ -75,6 +75,7 @@ export const adminData = {
   name: 'Admin Singh',
   role: 'ADMIN',
   password: 'admin@123',
+  parent: null,
 };
 
 async function main() {

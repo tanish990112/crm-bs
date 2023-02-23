@@ -12,9 +12,12 @@ import {
   CreateActivityDto,
   UpdateActivityDto,
 } from './dto/activity.dto';
+import { Role } from 'src/auth/role.enum';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from 'src/auth/roles.decorator';
 import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { ActivityService } from './activity.service';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
@@ -23,7 +26,8 @@ export class ActivityController {
   constructor(private activityService: ActivityService) {}
 
   @Post('createActivity')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: ActivityDetails })
   async createEvents(@Body() activityInfo: CreateActivityDto) {
     try {
@@ -40,7 +44,8 @@ export class ActivityController {
   }
 
   @Get('allActivity')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: [ActivityDetails] })
   async getAllActivity(): Promise<APIResponse | null> {
     try {
@@ -57,7 +62,8 @@ export class ActivityController {
   }
 
   @Get('getActivityDetails')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiOkResponse({ type: ActivityDetails })
   async getActivityById(
     @Query('activityId') activityId: number,
@@ -76,7 +82,8 @@ export class ActivityController {
   }
 
   @Patch('updateActivity')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   async updateEvent(
     @Query('activityId') activityId: number,
     @Body() toUpdate: UpdateActivityDto,

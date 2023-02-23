@@ -69,6 +69,7 @@ model LeadSourcer {
   activities Activity[]
   role       String
   token      String?
+  parent     Int?
 }
 
 model Config {

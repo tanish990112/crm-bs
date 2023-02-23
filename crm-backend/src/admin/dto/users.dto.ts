@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Role } from '../../auth/role.enum';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 class Users {
   @ApiProperty()
   email: string;
