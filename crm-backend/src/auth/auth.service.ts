@@ -14,7 +14,7 @@ export class AuthService {
     id: number;
   }): Promise<any> {
     try {
-      const userData = await this.prisma.leadSourcer.findUniqueOrThrow({
+      const userData = await this.prisma.leadSourcer.findUnique({
         where: { email: userDetails.username },
       });
       if (!userData) {
@@ -32,7 +32,7 @@ export class AuthService {
 
   async login(userDetails: Login) {
     try {
-      const userData = await this.prisma.leadSourcer.findUniqueOrThrow({
+      const userData = await this.prisma.leadSourcer.findUnique({
         where: { email: userDetails.email },
       });
 
@@ -55,19 +55,24 @@ export class AuthService {
           data: null,
         };
       }
-      const responseData = {
-        ...userData,
-        token: null,
-      };
+
       if (userData && passwordMatch) {
         const payload = { username: userData.email, id: userData.userId };
-        responseData.token = this.jwtService.sign(payload);
-        delete responseData.password;
+        userData.token = this.jwtService.sign(payload);
+        await this.prisma.leadSourcer.update({
+          where: {
+            userId: userData.userId,
+          },
+          data: {
+            token: userData.token,
+          },
+        });
+        delete userData.password;
       }
       return {
         statusCode: Constants.statusCodes.OK,
         message: Constants.messages.SUCCESS,
-        data: responseData,
+        data: userData,
       };
     } catch (error) {
       console.log(error.message);

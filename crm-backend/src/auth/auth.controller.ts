@@ -5,7 +5,14 @@ import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
@@ -28,9 +35,20 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/protect')
-  getProtect() {
-    return true;
+  @UseGuards(AuthGuard('jwt'))
+  getProtect(@Request() req) {
+    if (req.user)
+      return new APIResponse(
+        Constants.statusCodes.OK,
+        Constants.messages.SUCCESS,
+        req.user,
+      );
+    else
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.internalSeverError,
+        null,
+      );
   }
 }

@@ -1,7 +1,10 @@
+import { Role } from 'src/auth/role.enum';
 import { LeadService } from './lead.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Constants } from 'src/common/constants';
+import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { LeadChangeObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
 import { CreateLeadDto, ListLeadDto } from './dto/lead.dto';
@@ -13,6 +16,8 @@ export class LeadController {
   constructor(private leadService: LeadService) {}
 
   @Get('getLeads')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @ApiOkResponse({ type: [CreateLeadDto] })
   @UseGuards(AuthGuard('jwt'))
   async getLeads(
@@ -34,7 +39,8 @@ export class LeadController {
 
   @Get('getLeadDetails')
   @ApiOkResponse({ type: CreateLeadDto })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   async getLeadDetails(
     @Query('leadId') leadId: string,
   ): Promise<APIResponse | null> {
@@ -52,8 +58,9 @@ export class LeadController {
   }
 
   @Post('addLead')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: CreateLeadDto })
-  @UseGuards(AuthGuard('jwt'))
   async createLead(
     @Body() lead: ListLeadDto,
     @LeadChangeObject() leadChangeObject: CreateLeadDto,
