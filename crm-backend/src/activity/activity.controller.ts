@@ -5,8 +5,14 @@ import {
   Patch,
   Post,
   Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import {
   ActivityDetails,
   CreateActivityDto,
@@ -19,17 +25,20 @@ import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { ActivityService } from './activity.service';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('activity')
+@ApiBearerAuth('Authorization')
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class ActivityController {
   constructor(private activityService: ActivityService) {}
 
   @Post('createActivity')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: ActivityDetails })
-  async createEvents(@Body() activityInfo: CreateActivityDto) {
+  async createEvents(
+    @Request() req: any,
+    @Body() activityInfo: CreateActivityDto,
+  ) {
     try {
       const { statusCode, message, data } =
         await this.activityService.createActivity(activityInfo);
@@ -44,10 +53,9 @@ export class ActivityController {
   }
 
   @Get('allActivity')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: [ActivityDetails] })
-  async getAllActivity(): Promise<APIResponse | null> {
+  async getAllActivity(@Request() req: any): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } =
         await this.activityService.getAllActivities();
@@ -62,10 +70,10 @@ export class ActivityController {
   }
 
   @Get('getActivityDetails')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiOkResponse({ type: ActivityDetails })
   async getActivityById(
+    @Request() req: any,
     @Query('activityId') activityId: number,
   ): Promise<APIResponse | null> {
     try {
@@ -82,11 +90,11 @@ export class ActivityController {
   }
 
   @Patch('updateActivity')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   async updateEvent(
-    @Query('activityId') activityId: number,
+    @Request() req: any,
     @Body() toUpdate: UpdateActivityDto,
+    @Query('activityId') activityId: number,
   ) {
     try {
       const { statusCode, message, data } =

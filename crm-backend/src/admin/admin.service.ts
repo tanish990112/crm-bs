@@ -36,7 +36,7 @@ export class AdminService {
     }
   }
 
-  async createUser(data: CreateUserDto) {
+  async createUser(data: CreateUserDto, parentDetails) {
     try {
       const checkUser = await this.prisma.leadSourcer.findFirst({
         where: {
@@ -52,6 +52,7 @@ export class AdminService {
         };
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword;
+      data.parent = parentDetails.userId;
       console.log(data);
       const user = await this.prisma.leadSourcer.create({ data });
       delete user.password;
