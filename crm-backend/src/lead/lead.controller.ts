@@ -20,8 +20,8 @@ import { Constants } from 'src/common/constants';
 import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { LeadChangeObject, LeadUpdateObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
+import { LeadChangeObject, LeadUpdateObject } from './lead.decorator';
 import { CreateLeadDto, ListLeadDto, UpdateLeadDto } from './dto/lead.dto';
 
 @Controller('lead')
@@ -32,6 +32,8 @@ export class LeadController {
   constructor(private leadService: LeadService) {}
 
   @Get('getLeads')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @ApiOkResponse({ type: [CreateLeadDto] })
   async getLeads(
     @Request() req: any,
@@ -53,11 +55,7 @@ export class LeadController {
   }
 
   @Get('getLeadDetails')
-  @ApiOkResponse({
-    status: Constants.statusCodes.OK,
-    description: Constants.messages.SUCCESS,
-    type: CreateLeadDto,
-  })
+  @ApiOkResponse({ type: CreateLeadDto })
   async getLeadDetails(
     @Request() req: any,
     @Query('leadId') leadId: string,
@@ -76,6 +74,8 @@ export class LeadController {
   }
 
   @Post('addLead')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: CreateLeadDto })
   async createLead(
     @Request() req: any,

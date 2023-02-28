@@ -45,6 +45,7 @@ export class AdminController {
   @Post('createUsers')
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiCreatedResponse({ type: UserDetailsDto })
+  @Roles(Role.ADMIN, Role.STAFF)
   async createUsers(
     @Request() req: any,
     @Body() userInfoDetails: CreateUserDto,
