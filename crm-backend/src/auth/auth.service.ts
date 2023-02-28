@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Login } from 'src/common/common.dto';
 import { DbService } from 'src/db/db.service';
 import { Constants } from 'src/common/constants';
+import { UserDetailsDto } from 'src/admin/dto/users.dto';
 
 @Injectable()
 export class AuthService {
@@ -76,6 +77,31 @@ export class AuthService {
       };
     } catch (error) {
       console.log(error.message);
+      throw error;
+    }
+  }
+
+  async logout(userInfo: UserDetailsDto) {
+    try {
+      const tokenDeletion = await this.prisma.leadSourcer.update({
+        where: { userId: userInfo.userId },
+        data: { token: null },
+      });
+      if (tokenDeletion.token !== null) {
+        return {
+          statusCode: Constants.statusCodes.INTERNAL_SERVER_ERROR,
+          message: Constants.messages.SOMETHING_WENT_WRONG,
+          data: null,
+        };
+      } else {
+        delete tokenDeletion.password;
+        return {
+          statusCode: Constants.statusCodes.OK,
+          message: Constants.messages.LOGOUT_SUCCESSFULL,
+          data: null,
+        };
+      }
+    } catch (error) {
       throw error;
     }
   }

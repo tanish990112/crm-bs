@@ -5,8 +5,14 @@ import {
   Patch,
   Post,
   Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import {
   ActivityDetails,
   CreateActivityDto,
@@ -19,17 +25,20 @@ import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { ActivityService } from './activity.service';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('activity')
+@ApiBearerAuth('Authorization')
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class ActivityController {
   constructor(private activityService: ActivityService) {}
 
   @Post('createActivity')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: ActivityDetails })
-  async createEvents(@Body() activityInfo: CreateActivityDto) {
+  async createActivity(
+    @Request() req: any,
+    @Body() activityInfo: CreateActivityDto,
+  ) {
     try {
       const { statusCode, message, data } =
         await this.activityService.createActivity(activityInfo);
@@ -37,14 +46,13 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
   }
 
   @Get('allActivity')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: [ActivityDetails] })
   async getAllActivity(): Promise<APIResponse | null> {
@@ -55,17 +63,17 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
   }
 
   @Get('getActivityDetails')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiOkResponse({ type: ActivityDetails })
   async getActivityById(
+    @Request() req: any,
     @Query('activityId') activityId: number,
   ): Promise<APIResponse | null> {
     try {
@@ -75,18 +83,19 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
   }
 
   @Patch('updateActivity')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
-  async updateEvent(
-    @Query('activityId') activityId: number,
+  @ApiOkResponse({ type: UpdateActivityDto })
+  async updateActivity(
+    @Request() req: any,
     @Body() toUpdate: UpdateActivityDto,
+    @Query('activityId') activityId: number,
   ) {
     try {
       const { statusCode, message, data } =
@@ -95,7 +104,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }

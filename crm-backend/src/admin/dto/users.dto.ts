@@ -12,6 +12,9 @@ class Users {
 
   @ApiProperty()
   role: Role;
+
+  @ApiProperty()
+  parent: number;
 }
 export class CreateUserDto extends Users {
   @ApiProperty()
