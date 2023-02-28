@@ -26,23 +26,23 @@ import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
 export class AdminController {
   constructor(private adminServices: AdminService) {}
 
-  @Get('/users')
-  @Roles(Role.STAFF, Role.ADMIN, Role.USER)
+  @Get('users')
+  @Roles(Role.STAFF, Role.ADMIN)
   @ApiOkResponse({ type: [UserDetailsDto] })
-  async getUsers(@Request() req: any): Promise<APIResponse | null> {
+  async getUsers(): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.adminServices.getUsers();
       return new APIResponse(statusCode, message, data);
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
   }
 
-  @Post('/createUsers')
+  @Post('createUsers')
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiCreatedResponse({ type: UserDetailsDto })
   async createUsers(
@@ -58,7 +58,7 @@ export class AdminController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }

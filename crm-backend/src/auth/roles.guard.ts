@@ -16,17 +16,6 @@ export class RolesGuard implements CanActivate {
       return false;
     }
     const userInfo = context.switchToHttp().getRequest().user;
-    // const checkingRoleExistence = requiredRoles.some((role) =>
-    //   userInfo?.role?.includes(role),
-    // );
-    // if (checkingRoleExistence) {
-    //   const checkingUser = await this.prisma.leadSourcer.findUnique({
-    //     where: {
-    //       userId: userInfo?.userId,
-    //     },
-    //   });
-    //   return checkingUser && checkingUser.userId ? true : false;
-    // } else return false;
     console.log(userInfo, 'Inside roles guard');
     return requiredRoles.some((role) => userInfo?.role?.includes(role));
   }

@@ -35,7 +35,7 @@ export class ActivityController {
   @Post('createActivity')
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: ActivityDetails })
-  async createEvents(
+  async createActivity(
     @Request() req: any,
     @Body() activityInfo: CreateActivityDto,
   ) {
@@ -46,7 +46,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
@@ -55,7 +55,7 @@ export class ActivityController {
   @Get('allActivity')
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: [ActivityDetails] })
-  async getAllActivity(@Request() req: any): Promise<APIResponse | null> {
+  async getAllActivity(): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } =
         await this.activityService.getAllActivities();
@@ -63,7 +63,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
@@ -83,7 +83,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
@@ -91,7 +91,8 @@ export class ActivityController {
 
   @Patch('updateActivity')
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
-  async updateEvent(
+  @ApiOkResponse({ type: UpdateActivityDto })
+  async updateActivity(
     @Request() req: any,
     @Body() toUpdate: UpdateActivityDto,
     @Query('activityId') activityId: number,
@@ -103,7 +104,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }

@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { CreateUserDto } from './dto/users.dto';
+import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
 import { Constants } from 'src/common/constants';
 @Injectable()
 export class AdminService {
@@ -26,7 +26,7 @@ export class AdminService {
       else {
         return {
           statusCode: Constants.statusCodes.NOT_FOUND,
-          message: Constants.messages.failure,
+          message: Constants.messages.FAILURE,
           data: null,
         };
       }
@@ -36,7 +36,7 @@ export class AdminService {
     }
   }
 
-  async createUser(data: CreateUserDto, parentDetails) {
+  async createUser(data: CreateUserDto, parentDetails: UserDetailsDto) {
     try {
       const checkUser = await this.prisma.leadSourcer.findFirst({
         where: {
@@ -47,9 +47,16 @@ export class AdminService {
       if (checkUser)
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
-          message: Constants.messages.userExist,
+          message: Constants.messages.USER_ALREADY_EXIST,
           data: data,
         };
+      if (data.role === 'ADMIN' && parentDetails.role === 'STAFF') {
+        return {
+          statusCode: Constants.statusCodes.UNAUTHORIZED,
+          message: Constants.messages.UNAUTHORIZED,
+          data: null,
+        };
+      }
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword;
       data.parent = parentDetails.userId;
@@ -59,7 +66,7 @@ export class AdminService {
       if (!user) {
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
-          message: Constants.messages.failure,
+          message: Constants.messages.FAILURE,
           data: null,
         };
       }

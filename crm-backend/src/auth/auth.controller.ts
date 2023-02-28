@@ -21,7 +21,7 @@ import { UserDetailsDto } from 'src/admin/dto/users.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/login')
+  @Post('login')
   @ApiCreatedResponse({ type: UserDetailsDto })
   async login(@Body() userDetails: Login): Promise<APIResponse | null> {
     try {
@@ -32,13 +32,32 @@ export class AuthController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
   }
 
-  @Get('/protect')
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('Authorization')
+  // @ApiCreatedResponse()
+  async logout(@Request() req: any) {
+    try {
+      const { statusCode, message, data } = await this.authService.logout(
+        req.user,
+      );
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.INTERNAL_SERVER_ERROR,
+        null,
+      );
+    }
+  }
+
+  @Get('protect')
   @Roles(Role.ADMIN)
   @ApiBearerAuth('Authorization')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -52,7 +71,7 @@ export class AuthController {
     else
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
   }

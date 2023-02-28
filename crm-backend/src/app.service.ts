@@ -21,7 +21,7 @@ export class AppService {
       if (!Object.keys(config).length) {
         return {
           statusCode: Constants.statusCodes.NOT_FOUND,
-          message: Constants.messages.failure,
+          message: Constants.messages.FAILURE,
           data: null,
         };
       }
