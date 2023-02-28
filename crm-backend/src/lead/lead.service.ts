@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { UpdateLeadDto } from './dto/lead.dto';
 import { Constants } from 'src/common/constants';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
 
