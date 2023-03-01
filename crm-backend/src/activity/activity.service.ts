@@ -1,8 +1,8 @@
+import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { Prisma } from '@prisma/client';
-import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
 import { Constants } from '../common/constants';
+import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
 
 @Injectable()
 export class ActivityService {
@@ -23,7 +23,7 @@ export class ActivityService {
       } else {
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
-          message: Constants.messages.failure,
+          message: Constants.messages.FAILURE,
           data: data,
         };
       }
@@ -48,7 +48,7 @@ export class ActivityService {
       } else {
         return {
           statusCode: Constants.statusCodes.NOT_FOUND,
-          message: Constants.messages.failure,
+          message: Constants.messages.NO_DATA_FOUND,
           data: null,
         };
       }
@@ -77,7 +77,7 @@ export class ActivityService {
       else
         return {
           statusCode: Constants.statusCodes.NOT_FOUND,
-          message: Constants.messages.failure,
+          message: Constants.messages.NO_DATA_FOUND,
           data: null,
         };
     } catch (error) {
@@ -95,7 +95,7 @@ export class ActivityService {
         },
         data,
       });
-      if (activityUpdation.id)
+      if (activityUpdation && activityUpdation.id)
         return {
           statusCode: Constants.statusCodes.OK,
           message: Constants.messages.SUCCESS,
@@ -104,7 +104,7 @@ export class ActivityService {
       else
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
-          message: Constants.messages.failure,
+          message: Constants.messages.FAILURE,
           data: data,
         };
     } catch (error) {
@@ -116,6 +116,7 @@ export class ActivityService {
 
 const selectActivityData = {
   id: true,
+  lead: true,
   leadId: true,
   description: true,
   typeOfActivity: true,

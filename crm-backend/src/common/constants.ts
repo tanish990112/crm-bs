@@ -9,15 +9,19 @@ export const Constants = {
     CREATED: StatusCodes.CREATED,
     INTERNAL_SERVER_ERROR: StatusCodes.INTERNAL_SERVER_ERROR,
     FORBIDDEN: StatusCodes.FORBIDDEN,
+    UNAUTHORIZED: StatusCodes.UNAUTHORIZED,
   },
 
   messages: {
     SUCCESS: 'Success',
-    failure: 'failure',
-    somethingWentWrong: 'Something went wrong',
-    internalSeverError: 'Internal Server Error',
-    userExist: 'User with this email already exists',
+    FAILURE: 'failure',
+    SOMETHING_WENT_WRONG: 'Something went wrong',
+    INTERNAL_SERVER_ERROR: 'Internal Server Error',
+    USER_ALREADY_EXIST: 'User with this email already exists',
     NO_LEADS: 'No Leads Were Found.',
     LOGIN_FAILED: 'Email Or Password is incorrect.',
+    UNAUTHORIZED: 'UNAUTHORIZED',
+    NO_DATA_FOUND: 'No Data Found',
+    LOGOUT_SUCCESSFULL: 'Logout Successfully',
   },
 };

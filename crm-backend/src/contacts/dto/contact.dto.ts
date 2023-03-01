@@ -29,3 +29,9 @@ export class ListContactDto {
   @ApiPropertyOptional()
   skypeId?: string;
 }
+
+export class UpdateContactDto extends ListContactDto {
+  @ApiProperty()
+  @IsString()
+  id: number;
+}
