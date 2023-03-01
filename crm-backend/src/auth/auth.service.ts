@@ -12,6 +12,7 @@ export class AuthService {
   async validateUser(userDetails: {
     username: string;
     id: number;
+    role: string;
   }): Promise<any> {
     try {
       const userData = await this.prisma.leadSourcer.findUniqueOrThrow({
@@ -52,9 +53,21 @@ export class AuthService {
         token: null,
       };
       if (userData && passwordMatch) {
-        const payload = { username: userData.email, id: userData.userId };
-        responseData.token = this.jwtService.sign(payload);
-        delete responseData.password;
+        const payload = {
+          username: userData.email,
+          id: userData.userId,
+          role: userData.role,
+        };
+        userData.token = this.jwtService.sign(payload);
+        await this.prisma.leadSourcer.update({
+          where: {
+            userId: userData.userId,
+          },
+          data: {
+            token: userData.token,
+          },
+        });
+        delete userData.password;
       }
       return {
         statusCode: Constants.statusCodes.OK,
