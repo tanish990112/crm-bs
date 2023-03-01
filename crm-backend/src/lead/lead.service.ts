@@ -63,9 +63,9 @@ export class LeadService {
           });
           if (!leadsData.length) {
             return {
-              statusCode: Constants.statusCodes.NOT_FOUND,
-              message: Constants.messages.FAILURE,
-              data: null,
+              statusCode: Constants.statusCodes.OK,
+              message: Constants.messages.SUCCESS,
+              data: [],
             };
           }
           leadsData.forEach((lead) => {
@@ -86,9 +86,9 @@ export class LeadService {
           });
           if (!leadsData.length) {
             return {
-              statusCode: Constants.statusCodes.NOT_FOUND,
-              message: Constants.messages.FAILURE,
-              data: null,
+              statusCode: Constants.statusCodes.OK,
+              message: Constants.messages.SUCCESS,
+              data: [],
             };
           }
           leadsData.forEach((lead) => {
@@ -118,7 +118,7 @@ export class LeadService {
         if (!leadInfo) {
           return {
             statusCode: Constants.statusCodes.OK,
-            message: Constants.messages.NO_LEADS,
+            message: Constants.messages.SUCCESS,
             data: null,
           };
         }
@@ -156,7 +156,7 @@ export class LeadService {
           if (!leadInfo) {
             return {
               statusCode: Constants.statusCodes.OK,
-              message: Constants.messages.NO_LEADS,
+              message: Constants.messages.SUCCESS,
               data: null,
             };
           }
@@ -178,7 +178,7 @@ export class LeadService {
           if (!leadInfo) {
             return {
               statusCode: Constants.statusCodes.OK,
-              message: Constants.messages.NO_LEADS,
+              message: Constants.messages.SUCCESS,
               data: null,
             };
           }
@@ -218,7 +218,7 @@ export class LeadService {
     }
   }
 
-  async updateLead(leadId: string, data) {
+  async updateLead(leadId: string, data: any) {
     try {
       const leadUpdation = await this.prisma.lead.update({
         where: { leadId },

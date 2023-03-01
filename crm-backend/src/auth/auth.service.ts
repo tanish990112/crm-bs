@@ -39,7 +39,7 @@ export class AuthService {
 
       if (!userData) {
         return {
-          statusCode: Constants.statusCodes.OK,
+          statusCode: Constants.statusCodes.BAD_REQUEST,
           message: Constants.messages.LOGIN_FAILED,
           data: null,
         };
