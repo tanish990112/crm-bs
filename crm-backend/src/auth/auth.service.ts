@@ -21,7 +21,7 @@ export class AuthService {
       if (!userData) {
         return {
           statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.LOGIN_FAILED,
+          message: Constants.messages.INCORRECT_EMAIL,
           data: null,
         };
       }
@@ -40,7 +40,7 @@ export class AuthService {
       if (!userData) {
         return {
           statusCode: Constants.statusCodes.BAD_REQUEST,
-          message: Constants.messages.LOGIN_FAILED,
+          message: Constants.messages.INCORRECT_EMAIL,
           data: null,
         };
       }
@@ -51,8 +51,8 @@ export class AuthService {
 
       if (!passwordMatch) {
         return {
-          statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.LOGIN_FAILED,
+          statusCode: Constants.statusCodes.BAD_REQUEST,
+          message: Constants.messages.PASSWORD_INCORRECT,
           data: null,
         };
       }
