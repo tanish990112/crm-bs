@@ -67,6 +67,9 @@ model LeadSourcer {
   password   String
   lead       Lead[]
   activities Activity[]
+  role       String
+  token      String?
+  parent     Int?
 }
 
 model Config {

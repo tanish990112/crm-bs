@@ -1,15 +1,33 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import { Role } from 'src/auth/role.enum';
+import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
 import { Constants } from 'src/common/constants';
+import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { CreateUserDto, UserDetailsDto } from './dto/users.dto';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('admin')
+@ApiBearerAuth('Authorization')
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class AdminController {
   constructor(private adminServices: AdminService) {}
 
-  @Get('/users')
+  @Get('users')
+  @Roles(Role.STAFF, Role.ADMIN)
   @ApiOkResponse({ type: [UserDetailsDto] })
   async getUsers(): Promise<APIResponse | null> {
     try {
@@ -18,26 +36,30 @@ export class AdminController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
   }
 
-  @Post('/createUsers')
+  @Post('createUsers')
+  @Roles(Role.ADMIN, Role.STAFF)
   @ApiCreatedResponse({ type: UserDetailsDto })
+  @Roles(Role.ADMIN, Role.STAFF)
   async createUsers(
+    @Request() req: any,
     @Body() userInfoDetails: CreateUserDto,
   ): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.adminServices.createUser(
         userInfoDetails,
+        req.user,
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }

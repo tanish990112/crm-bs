@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 
 // initialize the Prisma Client
@@ -55,6 +56,26 @@ export const ConfigData = {
     { label: 'Large Enterprise' },
     { label: 'Hiring Platform' },
   ],
+  role: [
+    { label: 'USER', info: 'Can perform CRUD operations on his own records.' },
+    {
+      label: 'STAFF',
+      info: 'Can perform CRUD operations on his own + associated users with him.',
+    },
+    {
+      label: 'ADMIN',
+      info: 'Can perform CRUD operations on his own + all the other users within the system.',
+    },
+  ],
+};
+
+export const adminData = {
+  email: 'admin@bonamisoftware.com',
+  phone: '9999999999',
+  name: 'Admin Singh',
+  role: 'ADMIN',
+  password: 'admin@123',
+  parent: null,
 };
 
 async function main() {
@@ -76,6 +97,16 @@ async function main() {
     }
     current++;
   }
+  const hashedPassword = await bcrypt.hash(adminData.password, 10);
+  adminData.password = hashedPassword;
+  const admin = await prisma.leadSourcer.upsert({
+    where: {
+      email: adminData.email,
+    },
+    update: {},
+    create: { ...adminData },
+  });
+  console.log(admin);
 }
 
 // execute the main function

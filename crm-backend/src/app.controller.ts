@@ -15,7 +15,7 @@ export class AppController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.internalSeverError,
+        Constants.messages.INTERNAL_SERVER_ERROR,
         null,
       );
     }
