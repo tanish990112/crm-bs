@@ -21,9 +21,9 @@ export class LeadService {
         });
         if (!leadsData.length) {
           return {
-            statusCode: Constants.statusCodes.NOT_FOUND,
-            message: Constants.messages.FAILURE,
-            data: null,
+            statusCode: Constants.statusCodes.OK,
+            message: Constants.messages.SUCCESS,
+            data: [],
           };
         }
         leadsData.forEach((lead) => {
