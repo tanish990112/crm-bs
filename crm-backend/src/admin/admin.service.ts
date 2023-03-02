@@ -15,6 +15,7 @@ export class AdminService {
           name: true,
           userId: true,
           phone: true,
+          role: true,
         },
       });
       if (users.length)
@@ -40,15 +41,15 @@ export class AdminService {
     try {
       const checkUser = await this.prisma.leadSourcer.findFirst({
         where: {
-          email: data.email,
+          OR: [{ email: data.email }, { phone: data.phone }],
         },
       });
 
       if (checkUser)
         return {
-          statusCode: Constants.statusCodes.BAD_GATEWAY,
+          statusCode: Constants.statusCodes.BAD_REQUEST,
           message: Constants.messages.USER_ALREADY_EXIST,
-          data: data,
+          data: null,
         };
       if (data.role === 'ADMIN' && parentDetails.role === 'STAFF') {
         return {
