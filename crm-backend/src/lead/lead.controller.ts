@@ -32,8 +32,6 @@ export class LeadController {
   constructor(private leadService: LeadService) {}
 
   @Get('getLeads')
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @ApiOkResponse({ type: [CreateLeadDto] })
   async getLeads(
     @Request() req: any,
@@ -74,8 +72,6 @@ export class LeadController {
   }
 
   @Post('addLead')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: CreateLeadDto })
   async createLead(
     @Request() req: any,
