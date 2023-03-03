@@ -1,17 +1,15 @@
 version: '3.8'
 services:
-  # api:
-  #   container_name: api
-  #   restart: always
-  #   build: .
-  #   ports:
-  #     - ${PORT}:${PORT}
-  #   depends_on:
-  #     - db
-  #   expose:
-  #     - 5555
-  #   volumes:
-  #   - .:/usr/src/app
+  api:
+    container_name: api
+    restart: always
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db
+    volumes:
+    - .:/usr/src/app
 
   db:
     container_name: postgres
@@ -26,5 +24,20 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    depends_on:
+      - db
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
+
 volumes: 
  data: {}
+ pgadmin-data:
