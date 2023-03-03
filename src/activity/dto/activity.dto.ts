@@ -15,8 +15,8 @@ export class CreateActivityDto {
   typeOfActivity: string;
 
   @ApiProperty()
-  @IsDate()
-  activityTime: Date;
+  @IsString()
+  activityTime: string;
 
   @ApiProperty()
   @IsNumber()

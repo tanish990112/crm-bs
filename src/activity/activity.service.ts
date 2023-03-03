@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { Constants } from '../common/constants';
 import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class ActivityService {
@@ -10,6 +11,7 @@ export class ActivityService {
 
   async createActivity(data: CreateActivityDto) {
     try {
+      data.activityTime = moment(data.activityTime).toISOString();
       const activityCreated = await this.prisma.activity.create({
         data,
       });

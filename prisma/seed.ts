@@ -67,6 +67,12 @@ export const ConfigData = {
       info: 'Can perform CRUD operations on his own + all the other users within the system.',
     },
   ],
+
+  activityType: [
+    { label: 'Call' },
+    { label: 'Face to Face meeting' },
+    { label: 'Online call' },
+  ],
 };
 
 export const adminData = {
