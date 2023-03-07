@@ -28,3 +28,8 @@ export class UserDetailsDto extends Users {
   @ApiPropertyOptional()
   token?: string;
 }
+
+export class UpdateUserDto extends UserDetailsDto {
+  @ApiPropertyOptional()
+  password?: string;
+}

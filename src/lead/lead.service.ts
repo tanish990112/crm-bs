@@ -13,7 +13,7 @@ export class LeadService {
     userInfo: UserDetailsDto,
   ) {
     try {
-      if (userInfo && userInfo.role === 'ADMIN') {
+      if (userInfo && userInfo.role === Constants.roles.admin) {
         const leadsData = await this.prisma.lead.findMany({
           skip: paginateQuery?.skip,
           take: paginateQuery?.take,
@@ -37,9 +37,10 @@ export class LeadService {
         };
       } else if (
         userInfo &&
-        (userInfo.role === 'STAFF' || userInfo.role === 'USER')
+        (userInfo.role === Constants.roles.staff ||
+          userInfo.role === Constants.roles.user)
       ) {
-        if (userInfo.role === 'STAFF') {
+        if (userInfo.role === Constants.roles.staff) {
           const getAllChilds = await this.prisma.leadSourcer.findMany({
             where: {
               parent: userInfo.userId,
@@ -77,7 +78,7 @@ export class LeadService {
             message: Constants.messages.SUCCESS,
             data: leadsData,
           };
-        } else if (userInfo.role === 'USER') {
+        } else if (userInfo.role === Constants.roles.user) {
           const leadsData = await this.prisma.lead.findMany({
             where: {
               leadSourcerUserId: userInfo.userId,
@@ -109,7 +110,7 @@ export class LeadService {
   }
   async getLeadDetails(leadIdToQuery: string, userInfo: UserDetailsDto) {
     try {
-      if (userInfo && userInfo.role === 'ADMIN') {
+      if (userInfo && userInfo.role === Constants.roles.admin) {
         const query = {
           leadId: leadIdToQuery,
         };
@@ -131,9 +132,10 @@ export class LeadService {
         };
       } else if (
         userInfo &&
-        (userInfo.role === 'USER' || userInfo.role === 'STAFF')
+        (userInfo.role === Constants.roles.user ||
+          userInfo.role === Constants.roles.staff)
       ) {
-        if (userInfo.role === 'STAFF') {
+        if (userInfo.role === Constants.roles.staff) {
           const getAllChilds = await this.prisma.leadSourcer.findMany({
             where: {
               parent: userInfo.userId,
@@ -167,7 +169,7 @@ export class LeadService {
             message: Constants.messages.SUCCESS,
             data: leadInfo,
           };
-        } else if (userInfo.role === 'USER') {
+        } else if (userInfo.role === Constants.roles.staff) {
           const leadInfo = await this.prisma.lead.findFirstOrThrow({
             where: {
               leadId: leadIdToQuery,

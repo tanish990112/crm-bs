@@ -5,7 +5,6 @@ import {
   Patch,
   Post,
   Query,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -35,10 +34,7 @@ export class ActivityController {
   @Post('createActivity')
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: ActivityDetails })
-  async createActivity(
-    @Request() req: any,
-    @Body() activityInfo: CreateActivityDto,
-  ) {
+  async createActivity(@Body() activityInfo: CreateActivityDto) {
     try {
       const { statusCode, message, data } =
         await this.activityService.createActivity(activityInfo);
@@ -73,7 +69,6 @@ export class ActivityController {
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiOkResponse({ type: ActivityDetails })
   async getActivityById(
-    @Request() req: any,
     @Query('activityId') activityId: number,
   ): Promise<APIResponse | null> {
     try {
@@ -93,7 +88,6 @@ export class ActivityController {
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiOkResponse({ type: UpdateActivityDto })
   async updateActivity(
-    @Request() req: any,
     @Body() toUpdate: UpdateActivityDto,
     @Query('activityId') activityId: number,
   ) {
