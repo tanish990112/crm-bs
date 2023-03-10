@@ -10,4 +10,4 @@ RUN npm install
 
 RUN npm i -g @nestjs/cli
 RUN npm i -g prisma
-CMD prisma migrate dev --name init && npm start
+CMD prisma migrate dev --name init && npm run start:dev
