@@ -1,52 +1,68 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateActivityDto {
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
   leadId: string;
 
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @ApiProperty()
   description: string;
 
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
   typeOfActivity: string;
 
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
   activityTime: string;
 
-  @ApiProperty()
   @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
   createdBy: number;
 }
 
 export class ActivityDetails extends CreateActivityDto {
-  @ApiProperty()
   @IsDate()
+  @ApiProperty()
   createdAt: Date;
 
-  @ApiProperty()
   @IsDate()
+  @ApiProperty()
   modifiedAt: Date;
 }
 
 export class UpdateActivityDto {
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @ApiPropertyOptional()
   leadId?: string;
 
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @ApiPropertyOptional()
   description?: string;
 
-  @ApiProperty()
   @IsString()
+  @IsNotEmpty()
+  @ApiPropertyOptional()
   typeOfActivity?: string;
 
-  @ApiProperty()
   @IsDate()
+  @IsNotEmpty()
+  @ApiPropertyOptional()
   activityTime?: Date;
 }

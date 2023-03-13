@@ -11,7 +11,6 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiProperty,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { AuthGuard } from '@nestjs/passport';
