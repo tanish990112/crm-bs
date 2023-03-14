@@ -7,30 +7,53 @@ import { Constants } from 'src/common/constants';
 export class AdminService {
   constructor(private prisma: DbService) {}
 
-  async getUsers() {
+  async getUsers(userId?: number) {
     try {
-      const users = await this.prisma.leadSourcer.findMany({
-        select: {
-          email: true,
-          name: true,
-          userId: true,
-          phone: true,
-          role: true,
-        },
-      });
-      if (users.length)
-        return {
-          statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.SUCCESS,
-          data: users,
+      let users = null;
+      if (!userId) {
+        users = await this.prisma.leadSourcer.findMany({
+          select: userSelect,
+        });
+      } else {
+        const userDetails = await this.prisma.leadSourcer.findFirst({
+          where: { userId: +userId },
+          select: userSelect,
+        });
+        const parentDetails =
+          userDetails &&
+          userDetails.parent &&
+          (await this.prisma.leadSourcer.findUnique({
+            where: { userId: userDetails.parent },
+            select: {
+              name: true,
+            },
+          }));
+        users = {
+          userId: userDetails.userId,
+          name: userDetails.name,
+          email: userDetails.email,
+          phone: userDetails.phone,
+          role: userDetails.role,
         };
-      else {
-        return {
-          statusCode: Constants.statusCodes.NOT_FOUND,
-          message: Constants.messages.FAILURE,
-          data: null,
-        };
+
+        users.parent = parentDetails
+          ? {
+              parentId: userDetails.parent,
+              parentName: parentDetails.name,
+            }
+          : null;
       }
+      return users
+        ? {
+            statusCode: Constants.statusCodes.OK,
+            message: Constants.messages.SUCCESS,
+            data: users,
+          }
+        : {
+            statusCode: Constants.statusCodes.OK,
+            message: Constants.messages.NO_DATA_FOUND,
+            data: null,
+          };
     } catch (error) {
       console.log(error);
       throw error;
@@ -185,3 +208,12 @@ export class AdminService {
     }
   }
 }
+
+const userSelect = {
+  email: true,
+  name: true,
+  userId: true,
+  phone: true,
+  role: true,
+  parent: true,
+};

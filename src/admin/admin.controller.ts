@@ -6,11 +6,13 @@ import {
   UseGuards,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,12 +31,19 @@ export class AdminController {
   constructor(private adminServices: AdminService) {}
 
   @Get('users')
+  @ApiQuery({ name: 'userId', required: false, type: Number })
   @ApiOkResponse({ type: [UserDetailsDto] })
-  async getUsers(): Promise<APIResponse | null> {
+  async getUsers(
+    @Query('userId') userId?: number,
+  ): Promise<APIResponse | null> {
     try {
-      const { statusCode, message, data } = await this.adminServices.getUsers();
+      const { statusCode, message, data } = await this.adminServices.getUsers(
+        userId,
+      );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      console.log(error.message);
+
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
         Constants.messages.INTERNAL_SERVER_ERROR,
@@ -62,7 +71,7 @@ export class AdminController {
     }
   }
 
-  @Post('updateUserInfo')
+  @Put('updateUserInfo')
   @ApiCreatedResponse({ type: UserDetailsDto })
   async updateUser(
     @Body() userInfoDetails: UpdateUserDto,

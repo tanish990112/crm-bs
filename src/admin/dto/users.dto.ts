@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsNumberString,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import { Role } from '../../auth/role.enum';
@@ -13,9 +14,9 @@ class Users {
   @ApiProperty()
   email: string;
 
-  @IsNumberString()
   @IsNotEmpty()
   @ApiProperty()
+  @IsNumberString()
   phone: string;
 
   @IsString()
@@ -48,6 +49,7 @@ export class UserDetailsDto extends Users {
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   token?: string;
 }
@@ -55,6 +57,7 @@ export class UserDetailsDto extends Users {
 export class UpdateUserDto extends UserDetailsDto {
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   password?: string;
 }
