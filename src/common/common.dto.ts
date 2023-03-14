@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PaginateQuery {
@@ -12,11 +12,13 @@ export class PaginateQuery {
 }
 
 export class Login {
-  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
   @ApiProperty()
   email: string;
 
   @IsString()
+  @IsNotEmpty()
   @ApiProperty()
   password: string;
 }

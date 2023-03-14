@@ -198,11 +198,9 @@ export class LeadService {
     }
   }
 
-  async createLead(data: Prisma.LeadCreateInput) {
+  async createLead(data: Prisma.LeadUncheckedCreateInput) {
     try {
-      const createLead = await this.prisma.lead.create({
-        data,
-      });
+      const createLead = await this.prisma.lead.create({ data });
       if (!createLead) {
         return {
           statusCode: Constants.statusCodes.INTERNAL_SERVER_ERROR,
