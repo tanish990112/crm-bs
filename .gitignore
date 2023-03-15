@@ -2,7 +2,6 @@
 /dist
 /node_modules
 
-*.sql
 .env
 
 # Logs

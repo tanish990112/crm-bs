@@ -11,18 +11,18 @@ export class AdminService {
     try {
       let users = null;
       if (!userId) {
-        users = await this.prisma.leadSourcer.findMany({
+        users = await this.prisma.users.findMany({
           select: userSelect,
         });
       } else {
-        const userDetails = await this.prisma.leadSourcer.findFirst({
+        const userDetails = await this.prisma.users.findFirst({
           where: { userId: +userId },
           select: userSelect,
         });
         const parentDetails =
           userDetails &&
           userDetails.parent &&
-          (await this.prisma.leadSourcer.findUnique({
+          (await this.prisma.users.findUnique({
             where: { userId: userDetails.parent },
             select: {
               name: true,
@@ -62,7 +62,7 @@ export class AdminService {
 
   async createUser(data: CreateUserDto) {
     try {
-      const checkUser = await this.prisma.leadSourcer.findFirst({
+      const checkUser = await this.prisma.users.findFirst({
         where: {
           OR: [{ email: data.email }, { phone: data.phone }],
         },
@@ -77,7 +77,7 @@ export class AdminService {
 
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword;
-      const user = await this.prisma.leadSourcer.create({ data });
+      const user = await this.prisma.users.create({ data });
       delete user.password;
       if (!user) {
         return {
@@ -117,7 +117,7 @@ export class AdminService {
       delete data.userId;
       data?.token && delete data.token;
 
-      const user = await this.prisma.leadSourcer.update({
+      const user = await this.prisma.users.update({
         where: { userId: userToUpdate },
         data: data,
       });
@@ -143,7 +143,7 @@ export class AdminService {
 
   async deleteUser(userId: number) {
     try {
-      const checkUser = await this.prisma.leadSourcer.findUnique({
+      const checkUser = await this.prisma.users.findUnique({
         where: {
           userId: userId,
         },
@@ -157,7 +157,7 @@ export class AdminService {
         };
       }
 
-      const admin = await this.prisma.leadSourcer.findFirst({
+      const admin = await this.prisma.users.findFirst({
         where: { role: Constants.roles.admin },
       });
 
@@ -182,7 +182,7 @@ export class AdminService {
         };
       }
 
-      const deleteUser = await this.prisma.leadSourcer.delete({
+      const deleteUser = await this.prisma.users.delete({
         where: {
           userId: userId,
         },

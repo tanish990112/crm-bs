@@ -16,7 +16,7 @@ export class AuthService {
     role: string;
   }): Promise<any> {
     try {
-      const userData = await this.prisma.leadSourcer.findUnique({
+      const userData = await this.prisma.users.findUnique({
         where: { email: userDetails.username },
       });
       if (!userData) {
@@ -34,7 +34,7 @@ export class AuthService {
 
   async login(userDetails: Login) {
     try {
-      const userData = await this.prisma.leadSourcer.findUnique({
+      const userData = await this.prisma.users.findUnique({
         where: { email: userDetails.email },
       });
 
@@ -65,7 +65,7 @@ export class AuthService {
           role: userData.role,
         };
         userData.token = this.jwtService.sign(payload);
-        await this.prisma.leadSourcer.update({
+        await this.prisma.users.update({
           where: {
             userId: userData.userId,
           },
@@ -88,7 +88,7 @@ export class AuthService {
 
   async logout(userInfo: UserDetailsDto) {
     try {
-      const tokenDeletion = await this.prisma.leadSourcer.update({
+      const tokenDeletion = await this.prisma.users.update({
         where: { userId: userInfo.userId },
         data: { token: null },
       });

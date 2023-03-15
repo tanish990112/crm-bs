@@ -26,7 +26,7 @@ async function main() {
   }
   const hashedPassword = await bcrypt.hash(adminData.password, 10);
   adminData.password = hashedPassword;
-  const admin = await prisma.leadSourcer.upsert({
+  const admin = await prisma.users.upsert({
     where: {
       email: adminData.email,
     },
