@@ -1,12 +1,10 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PaginateQuery {
-  // @IsNumber()
   @ApiPropertyOptional()
   skip?: number;
 
-  // @IsNumber()
   @ApiPropertyOptional()
   take?: number;
 }
