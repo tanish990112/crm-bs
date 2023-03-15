@@ -41,7 +41,7 @@ export class LeadService {
           userInfo.role === Constants.roles.user)
       ) {
         if (userInfo.role === Constants.roles.staff) {
-          const getAllChilds = await this.prisma.leadSourcer.findMany({
+          const getAllChilds = await this.prisma.users.findMany({
             where: {
               parent: userInfo.userId,
             },
@@ -136,7 +136,7 @@ export class LeadService {
           userInfo.role === Constants.roles.staff)
       ) {
         if (userInfo.role === Constants.roles.staff) {
-          const getAllChilds = await this.prisma.leadSourcer.findMany({
+          const getAllChilds = await this.prisma.users.findMany({
             where: {
               parent: userInfo.userId,
             },

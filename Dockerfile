@@ -8,6 +8,4 @@ COPY package*.json /usr/src/app/
 
 RUN npm install
 
-RUN npm i -g @nestjs/cli
-RUN npm i -g prisma
-CMD prisma migrate dev --name init && npm run start:dev
+CMD npx prisma migrate deploy && npm run start:dev

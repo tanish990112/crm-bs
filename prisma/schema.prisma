@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Lead {
-  id                Int         @id @default(autoincrement())
-  leadId            String      @unique
+  id                Int        @id @default(autoincrement())
+  leadId            String     @unique
   linkedinUrl       String?
   employeeRatio     String?
   leadSource        String
   employeeCount     Int?
-  createdAt         DateTime    @default(now())
+  createdAt         DateTime   @default(now())
   company           String
   website           String?
   industry          String?
@@ -25,26 +25,26 @@ model Lead {
   country           String
   annualRevenue     Decimal?
   vendorManagement  String?
-  address           String      @default("N/A")
-  description       String      @default("N/A")
+  address           String     @default("N/A")
+  description       String     @default("N/A")
   contact           Contact[]
   activity          Activity[]
-  leadSourcer       LeadSourcer @relation(fields: [leadSourcerUserId], references: [userId])
+  leadSourcer       Users      @relation(fields: [leadSourcerUserId], references: [userId])
   leadSourcerUserId Int
-  accountStatus     Int?        @default(0)
+  accountStatus     Int?       @default(0)
 }
 
 model Activity {
-  id             Int         @id @default(autoincrement())
-  lead           Lead        @relation(fields: [leadId], references: [leadId])
+  id             Int      @id @default(autoincrement())
+  lead           Lead     @relation(fields: [leadId], references: [leadId])
   leadId         String
   description    String
   typeOfActivity String
-  activityTime   DateTime    @default(now())
-  leadSourcer    LeadSourcer @relation(fields: [createdBy], references: [userId])
+  activityTime   DateTime @default(now())
+  leadSourcer    Users    @relation(fields: [createdBy], references: [userId])
   createdBy      Int
-  createdAt      DateTime    @default(now())
-  modifiedAt     DateTime    @default(now())
+  createdAt      DateTime @default(now())
+  modifiedAt     DateTime @default(now())
 }
 
 model Contact {
@@ -54,12 +54,12 @@ model Contact {
   contactFirstName String
   contactLastName  String
   title            String
-  phone            String  
-  email            String  
+  phone            String
+  email            String
   skypeId          String?
 }
 
-model LeadSourcer {
+model Users {
   userId     Int        @id @default(autoincrement())
   name       String
   email      String     @unique

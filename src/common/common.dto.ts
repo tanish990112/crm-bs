@@ -2,11 +2,11 @@ import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PaginateQuery {
-  @IsNumber()
+  // @IsNumber()
   @ApiPropertyOptional()
   skip?: number;
 
-  @IsNumber()
+  // @IsNumber()
   @ApiPropertyOptional()
   take?: number;
 }
