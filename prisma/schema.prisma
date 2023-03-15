@@ -11,27 +11,27 @@ datasource db {
 model Lead {
   id                Int         @id @default(autoincrement())
   leadId            String      @unique
-  linkedinUrl       String
-  employeeRatio     String
+  linkedinUrl       String?
+  employeeRatio     String?
   leadSource        String
-  employeeCount     Int
+  employeeCount     Int?
   createdAt         DateTime    @default(now())
   company           String
-  website           String
-  industry          String
+  website           String?
+  industry          String?
   leadStatus        String
-  hourlyRate        Decimal
+  hourlyRate        Decimal?
   deployedCount     Int?
   country           String
-  annualRevenue     Decimal
-  vendorManagement  String
+  annualRevenue     Decimal?
+  vendorManagement  String?
   address           String      @default("N/A")
   description       String      @default("N/A")
   contact           Contact[]
   activity          Activity[]
   leadSourcer       LeadSourcer @relation(fields: [leadSourcerUserId], references: [userId])
   leadSourcerUserId Int
-  accountStatus     Int         @default(0)
+  accountStatus     Int?        @default(0)
 }
 
 model Activity {
@@ -54,8 +54,8 @@ model Contact {
   contactFirstName String
   contactLastName  String
   title            String
-  phone            String
-  email            String
+  phone            String  
+  email            String  
   skypeId          String?
 }
 

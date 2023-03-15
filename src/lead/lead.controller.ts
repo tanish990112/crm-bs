@@ -13,6 +13,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
 import { Role } from 'src/auth/role.enum';
 import { LeadService } from './lead.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -76,7 +77,7 @@ export class LeadController {
   async createLead(
     @Request() req: any,
     @Body() lead: ListLeadDto,
-    @LeadChangeObject() leadChangeObject: CreateLeadDto,
+    @LeadChangeObject() leadChangeObject: Prisma.LeadUncheckedCreateInput,
   ): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.leadService.createLead(
