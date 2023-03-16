@@ -35,9 +35,10 @@ export class ActivityService {
     }
   }
 
-  async getAllActivities() {
+  async getAllActivities(leadId: string) {
     try {
       const allActivities = await this.prisma.activity.findMany({
+        where: { leadId: leadId },
         select: selectActivityData,
       });
 

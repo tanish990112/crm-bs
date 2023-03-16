@@ -11,6 +11,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiQuery,
 } from '@nestjs/swagger';
 import {
   ActivityDetails,
@@ -51,10 +52,13 @@ export class ActivityController {
   @Get('allActivity')
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: [ActivityDetails] })
-  async getAllActivity(): Promise<APIResponse | null> {
+  @ApiQuery({ name: 'leadId', required: false, type: String })
+  async getAllActivity(
+    @Query('leadId') leadId?: string,
+  ): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } =
-        await this.activityService.getAllActivities();
+        await this.activityService.getAllActivities(leadId);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
       return new APIResponse(
