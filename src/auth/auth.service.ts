@@ -102,7 +102,7 @@ export class AuthService {
         delete tokenDeletion.password;
         return {
           statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.LOGOUT_SUCCESSFULL,
+          message: Constants.messages.LOGOUT_SUCCESSFUL,
           data: null,
         };
       }

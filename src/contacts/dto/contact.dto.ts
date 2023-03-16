@@ -18,8 +18,8 @@ export class ListContactDto {
 
   @IsString()
   @IsNotEmpty()
-  @ApiPropertyOptional()
-  contactLastName?: string;
+  @ApiProperty()
+  contactLastName: string;
 
   @IsString()
   @IsNotEmpty()

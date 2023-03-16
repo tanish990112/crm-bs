@@ -13,7 +13,6 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { Prisma } from '@prisma/client';
 import { Role } from 'src/auth/role.enum';
 import { LeadService } from './lead.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,8 +20,8 @@ import { Constants } from 'src/common/constants';
 import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { LeadUpdateObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
-import { LeadChangeObject, LeadUpdateObject } from './lead.decorator';
 import { CreateLeadDto, ListLeadDto, UpdateLeadDto } from './dto/lead.dto';
 
 @Controller('lead')
@@ -74,14 +73,10 @@ export class LeadController {
 
   @Post('addLead')
   @ApiCreatedResponse({ type: CreateLeadDto })
-  async createLead(
-    @Request() req: any,
-    @Body() lead: ListLeadDto,
-    @LeadChangeObject() leadChangeObject: Prisma.LeadUncheckedCreateInput,
-  ): Promise<APIResponse | null> {
+  async createLead(@Body() lead: ListLeadDto): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.leadService.createLead(
-        leadChangeObject,
+        lead,
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {

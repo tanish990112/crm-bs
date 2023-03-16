@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { Constants } from 'src/common/constants';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
+import { ListLeadDto } from './dto/lead.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class LeadService {
@@ -198,9 +200,46 @@ export class LeadService {
     }
   }
 
-  async createLead(data: Prisma.LeadUncheckedCreateInput) {
+  async createLead(leadInformation: ListLeadDto) {
     try {
-      const createLead = await this.prisma.lead.create({ data });
+      const { leadData, contactInfo } = leadInformation;
+
+      const getContactInfo = await this.prisma.contact.findFirst({
+        where: {
+          email: contactInfo.email,
+          phone: contactInfo.phone,
+        },
+      });
+
+      if (getContactInfo) {
+        const getLeadForContact = await this.prisma.lead.findFirst({
+          where: { leadId: getContactInfo.leadId },
+        });
+
+        if (
+          getLeadForContact &&
+          getLeadForContact.company == leadData.company
+        ) {
+          return {
+            statusCode: Constants.statusCodes.OK,
+            message: Constants.messages.LEAD_EXIST,
+            data: getLeadForContact,
+          };
+        }
+      }
+
+      const leadInfo: Prisma.LeadUncheckedCreateInput = {
+        ...leadData,
+        leadId: uuidv4(),
+        contact: {
+          create: { ...contactInfo },
+        },
+      };
+
+      const createLead = await this.prisma.lead.create({
+        data: leadInfo,
+      });
+
       if (!createLead) {
         return {
           statusCode: Constants.statusCodes.INTERNAL_SERVER_ERROR,
