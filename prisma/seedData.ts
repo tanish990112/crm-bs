@@ -64,8 +64,11 @@ export const ConfigData = {
 
   activityType: [
     { label: 'Call' },
-    { label: 'Face to Face meeting' },
     { label: 'Online call' },
+    { label: 'Description' },
+    { label: 'Dev Screening' },
+    { label: 'Technical Interview' },
+    { label: 'Face to Face meeting' },
   ],
 };
 
