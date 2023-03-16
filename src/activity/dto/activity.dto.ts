@@ -6,6 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateActivityDto {
   @IsString()
@@ -61,8 +62,9 @@ export class UpdateActivityDto {
   @ApiPropertyOptional()
   typeOfActivity?: string;
 
-  @IsDate()
   @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
   @ApiPropertyOptional()
   activityTime?: Date;
 }

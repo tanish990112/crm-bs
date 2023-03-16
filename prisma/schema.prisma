@@ -54,8 +54,8 @@ model Contact {
   contactFirstName String
   contactLastName  String
   title            String
-  phone            String
-  email            String
+  phone            String  @unique
+  email            String  @unique
   skypeId          String?
 }
 
