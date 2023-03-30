@@ -22,7 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
-    console.log(user, ' user in local strategy');
     delete user.password;
     return user;
   }

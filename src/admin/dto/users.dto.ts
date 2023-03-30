@@ -27,7 +27,7 @@ class Users {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  role: Role;
+  role: string;
 
   @IsNumber()
   @IsNotEmpty()

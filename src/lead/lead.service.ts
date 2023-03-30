@@ -1,14 +1,19 @@
-import { Prisma } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
+import { ListLeadDto } from './dto/lead.dto';
 import { Constants } from 'src/common/constants';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
-import { ListLeadDto } from './dto/lead.dto';
-import { v4 as uuidv4 } from 'uuid';
+import { CommonHelper } from 'src/common/helper/common.helper';
+import { LeadRepository } from 'src/repository/lead/lead.repository';
+import { ContactRepository } from 'src/repository/contacts/contacts.repository';
 
 @Injectable()
 export class LeadService {
-  constructor(private prisma: DbService) {}
+  constructor(
+    private commonHelper: CommonHelper,
+    private leadRepository: LeadRepository,
+    private contactRepository: ContactRepository,
+  ) {}
 
   async getLeads(
     paginateQuery: { skip?: number; take?: number },
@@ -16,7 +21,7 @@ export class LeadService {
   ) {
     try {
       if (userInfo && userInfo.role === Constants.roles.admin) {
-        const leadsData = await this.prisma.lead.findMany({
+        const leadsData = await this.leadRepository.findLeads({
           skip: paginateQuery?.skip,
           take: paginateQuery?.take,
           select: selectLeadDetails,
@@ -28,10 +33,7 @@ export class LeadService {
             data: [],
           };
         }
-        leadsData.forEach((lead) => {
-          delete lead.leadSourcer.password;
-          delete lead.leadSourcer.token;
-        });
+
         return {
           statusCode: Constants.statusCodes.OK,
           message: Constants.messages.SUCCESS,
@@ -43,27 +45,17 @@ export class LeadService {
           userInfo.role === Constants.roles.user)
       ) {
         if (userInfo.role === Constants.roles.staff) {
-          const getAllChilds = await this.prisma.users.findMany({
-            where: {
-              parent: userInfo.userId,
-            },
-            select: {
-              userId: true,
-            },
-          });
-          getAllChilds.push({ userId: userInfo.userId });
-          console.log(getAllChilds, 'ALL Childs With userId');
-          const id = [];
-          for (const element of getAllChilds) {
-            id.push(element.userId);
-          }
+          const childrenIds = await this.commonHelper.getAllChildren(
+            userInfo.userId,
+          );
 
-          const leadsData = await this.prisma.lead.findMany({
+          const leadsData = await this.leadRepository.findLeads({
             where: {
-              leadSourcerUserId: { in: id },
+              leadSourcerUserId: { in: childrenIds },
             },
             select: selectLeadDetails,
           });
+
           if (!leadsData.length) {
             return {
               statusCode: Constants.statusCodes.OK,
@@ -71,17 +63,14 @@ export class LeadService {
               data: [],
             };
           }
-          leadsData.forEach((lead) => {
-            delete lead.leadSourcer.password;
-            delete lead.leadSourcer.token;
-          });
+
           return {
             statusCode: Constants.statusCodes.OK,
             message: Constants.messages.SUCCESS,
             data: leadsData,
           };
         } else if (userInfo.role === Constants.roles.user) {
-          const leadsData = await this.prisma.lead.findMany({
+          const leadsData = await this.leadRepository.findLeads({
             where: {
               leadSourcerUserId: userInfo.userId,
             },
@@ -94,10 +83,7 @@ export class LeadService {
               data: [],
             };
           }
-          leadsData.forEach((lead) => {
-            delete lead.leadSourcer.password;
-            delete lead.leadSourcer.token;
-          });
+
           return {
             statusCode: Constants.statusCodes.OK,
             message: Constants.messages.SUCCESS,
@@ -106,17 +92,16 @@ export class LeadService {
         }
       }
     } catch (error) {
-      console.log(error.message, '----------');
       throw error;
     }
   }
   async getLeadDetails(leadIdToQuery: string, userInfo: UserDetailsDto) {
     try {
       if (userInfo && userInfo.role === Constants.roles.admin) {
-        const query = {
-          leadId: leadIdToQuery,
-        };
-        const leadInfo = await getLeadInformation(this.prisma, query);
+        const leadInfo = await this.leadRepository.findUnique({
+          where: { leadId: leadIdToQuery },
+          select: selectLeadDetails,
+        });
 
         if (!leadInfo) {
           return {
@@ -125,8 +110,7 @@ export class LeadService {
             data: null,
           };
         }
-        delete leadInfo.leadSourcer.password;
-        delete leadInfo.leadSourcer.token;
+
         return {
           statusCode: Constants.statusCodes.OK,
           message: Constants.messages.SUCCESS,
@@ -138,25 +122,18 @@ export class LeadService {
           userInfo.role === Constants.roles.staff)
       ) {
         if (userInfo.role === Constants.roles.staff) {
-          const getAllChilds = await this.prisma.users.findMany({
-            where: {
-              parent: userInfo.userId,
-            },
-            select: { userId: true },
-          });
-          getAllChilds.push({ userId: userInfo.userId });
-          const id = [];
-          getAllChilds.forEach((element) => {
-            id.push(element.userId);
-          });
+          const childrenIds = await this.commonHelper.getAllChildren(
+            userInfo.userId,
+          );
 
-          const leadInfo = await this.prisma.lead.findFirstOrThrow({
+          const leadInfo = await this.leadRepository.findFirstOrThrow({
             where: {
               leadId: leadIdToQuery,
-              leadSourcerUserId: { in: id },
+              leadSourcerUserId: { in: childrenIds },
             },
             select: selectLeadDetails,
           });
+
           if (!leadInfo) {
             return {
               statusCode: Constants.statusCodes.OK,
@@ -164,15 +141,13 @@ export class LeadService {
               data: null,
             };
           }
-          delete leadInfo.leadSourcer.password;
-          delete leadInfo.leadSourcer.token;
           return {
             statusCode: Constants.statusCodes.OK,
             message: Constants.messages.SUCCESS,
             data: leadInfo,
           };
         } else if (userInfo.role === Constants.roles.staff) {
-          const leadInfo = await this.prisma.lead.findFirstOrThrow({
+          const leadInfo = await this.leadRepository.findFirstOrThrow({
             where: {
               leadId: leadIdToQuery,
               leadSourcerUserId: userInfo.userId,
@@ -186,8 +161,6 @@ export class LeadService {
               data: null,
             };
           }
-          delete leadInfo.leadSourcer.password;
-          delete leadInfo.leadSourcer.token;
           return {
             statusCode: Constants.statusCodes.OK,
             message: Constants.messages.SUCCESS,
@@ -204,7 +177,7 @@ export class LeadService {
     try {
       const { leadData, contactInfo } = leadInformation;
 
-      const getContactInfo = await this.prisma.contact.findFirst({
+      const getContactInfo = await this.contactRepository.findFirstBy({
         where: {
           email: contactInfo.email,
           phone: contactInfo.phone,
@@ -212,7 +185,7 @@ export class LeadService {
       });
 
       if (getContactInfo) {
-        const getLeadForContact = await this.prisma.lead.findFirst({
+        const getLeadForContact = await this.leadRepository.findFirstOrThrow({
           where: { leadId: getContactInfo.leadId },
         });
 
@@ -228,7 +201,7 @@ export class LeadService {
         }
       }
 
-      const leadInfo: Prisma.LeadUncheckedCreateInput = {
+      const leadInfo = {
         ...leadData,
         leadId: uuidv4(),
         contact: {
@@ -236,7 +209,7 @@ export class LeadService {
         },
       };
 
-      const createLead = await this.prisma.lead.create({
+      const createLead = await this.leadRepository.createLead({
         data: leadInfo,
       });
 
@@ -253,50 +226,34 @@ export class LeadService {
         data: createLead,
       };
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
 
   async updateLead(leadId: string, data: any) {
     try {
-      const leadUpdation = await this.prisma.lead.update({
+      const leadUpdate = await this.leadRepository.updateLeadDetails({
         where: { leadId },
         data,
       });
-      if (leadUpdation && leadUpdation.id) {
-        return {
-          statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.SUCCESS,
-          data: leadUpdation,
-        };
-      } else {
+      if (!leadUpdate) {
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
           message: Constants.messages.FAILURE,
           data: null,
         };
       }
+      return {
+        statusCode: Constants.statusCodes.OK,
+        message: Constants.messages.SUCCESS,
+        data: leadUpdate,
+      };
     } catch (error) {
-      console.log(error.message);
       throw error;
     }
   }
 }
-
-const getLeadInformation = async (
-  prisma: DbService,
-  query: Prisma.LeadWhereUniqueInput,
-) => {
-  try {
-    const leadDetails = await prisma.lead.findUnique({
-      where: query,
-      select: selectLeadDetails,
-    });
-    return leadDetails;
-  } catch (error) {
-    throw error;
-  }
-};
 
 const selectLeadDetails = {
   id: true,
@@ -317,7 +274,16 @@ const selectLeadDetails = {
   vendorManagement: true,
   address: true,
   description: true,
-  leadSourcer: true,
+  leadSourcer: {
+    select: {
+      userId: true,
+      name: true,
+      email: true,
+      phone: true,
+      role: true,
+      parent: true,
+    },
+  },
   leadSourcerUserId: true,
   contact: true,
   activity: true,

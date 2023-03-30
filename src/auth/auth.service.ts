@@ -2,13 +2,16 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { Login } from 'src/common/common.dto';
-import { DbService } from 'src/db/db.service';
 import { Constants } from 'src/common/constants';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
+import { UsersRepository } from 'src/repository/users/users.repository';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private prisma: DbService) {}
+  constructor(
+    private jwtService: JwtService,
+    private userRepository: UsersRepository,
+  ) {}
 
   async validateUser(userDetails: {
     username: string;
@@ -16,7 +19,7 @@ export class AuthService {
     role: string;
   }): Promise<any> {
     try {
-      const userData = await this.prisma.users.findUnique({
+      const userData = await this.userRepository.findUniqueBy({
         where: { email: userDetails.username },
       });
       if (!userData) {
@@ -34,7 +37,7 @@ export class AuthService {
 
   async login(userDetails: Login) {
     try {
-      const userData = await this.prisma.users.findUnique({
+      const userData = await this.userRepository.findUniqueBy({
         where: { email: userDetails.email },
       });
 
@@ -57,40 +60,53 @@ export class AuthService {
           data: null,
         };
       }
+      const payload = {
+        username: userData.email,
+        id: userData.userId,
+        role: userData.role,
+      };
+      userData.token = this.jwtService.sign(payload);
 
-      if (userData && passwordMatch) {
-        const payload = {
-          username: userData.email,
-          id: userData.userId,
-          role: userData.role,
-        };
-        userData.token = this.jwtService.sign(payload);
-        await this.prisma.users.update({
-          where: {
-            userId: userData.userId,
-          },
-          data: {
-            token: userData.token,
-          },
-        });
-        delete userData.password;
-      }
+      const updatedUser = await this.userRepository.updateUser({
+        where: {
+          userId: userData.userId,
+        },
+        data: {
+          token: userData.token,
+        },
+        select: {
+          userId: true,
+          name: true,
+          email: true,
+          phone: true,
+          role: true,
+          parent: true,
+        },
+      });
+
       return {
         statusCode: Constants.statusCodes.OK,
         message: Constants.messages.SUCCESS,
-        data: userData,
+        data: updatedUser,
       };
     } catch (error) {
-      console.log(error.message);
       throw error;
     }
   }
 
   async logout(userInfo: UserDetailsDto) {
     try {
-      const tokenDeletion = await this.prisma.users.update({
+      const tokenDeletion = await this.userRepository.updateUser({
         where: { userId: userInfo.userId },
         data: { token: null },
+        select: {
+          userId: true,
+          name: true,
+          email: true,
+          phone: true,
+          role: true,
+          parent: true,
+        },
       });
       if (tokenDeletion.token !== null) {
         return {
@@ -98,14 +114,12 @@ export class AuthService {
           message: Constants.messages.SOMETHING_WENT_WRONG,
           data: null,
         };
-      } else {
-        delete tokenDeletion.password;
-        return {
-          statusCode: Constants.statusCodes.OK,
-          message: Constants.messages.LOGOUT_SUCCESSFUL,
-          data: null,
-        };
       }
+      return {
+        statusCode: Constants.statusCodes.OK,
+        message: Constants.messages.LOGOUT_SUCCESSFUL,
+        data: null,
+      };
     } catch (error) {
       throw error;
     }

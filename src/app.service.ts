@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from './db/db.service';
 import { Constants } from 'src/common/constants';
+import { ConfigRepository } from './repository/config/config.repository';
 
 @Injectable()
 export class AppService {
-  constructor(private prisma: DbService) {}
+  constructor(private configRepository: ConfigRepository) {}
   async getConfig() {
     try {
-      const configData = await this.prisma.config.findMany();
+      const configData = await this.configRepository.getAllConfigData();
 
       const config = {};
 

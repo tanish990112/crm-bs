@@ -1,18 +1,17 @@
-import { Prisma } from '@prisma/client';
+import * as moment from 'moment';
 import { Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
 import { Constants } from '../common/constants';
 import { CreateActivityDto, UpdateActivityDto } from './dto/activity.dto';
-import * as moment from 'moment';
+import { ActivityRepository } from 'src/repository/activity/activity.repository';
 
 @Injectable()
 export class ActivityService {
-  constructor(private prisma: DbService) {}
+  constructor(private activityRepository: ActivityRepository) {}
 
   async createActivity(data: CreateActivityDto) {
     try {
       data.activityTime = moment(data.activityTime).toISOString();
-      const activityCreated = await this.prisma.activity.create({
+      const activityCreated = await this.activityRepository.createActivity({
         data,
       });
 
@@ -37,7 +36,7 @@ export class ActivityService {
 
   async getAllActivities(leadId: string) {
     try {
-      const allActivities = await this.prisma.activity.findMany({
+      const allActivities = await this.activityRepository.findActivities({
         where: { leadId: leadId },
         select: selectActivityData,
       });
@@ -61,13 +60,10 @@ export class ActivityService {
     }
   }
 
-  async getParticularActivity(id: number) {
+  async getParticularActivity(activityId: number) {
     try {
-      const query: Prisma.ActivityWhereUniqueInput = {
-        id: id,
-      };
-      const eventData = await this.prisma.activity.findUnique({
-        where: query,
+      const eventData = await this.activityRepository.findUniqueActivityBy({
+        where: { id: activityId },
         select: selectActivityData,
       });
 
@@ -91,8 +87,8 @@ export class ActivityService {
 
   async updateActivity(id: number, data: UpdateActivityDto) {
     try {
-      data['modifiedAt'] = new Date();
-      const activityUpdation = await this.prisma.activity.update({
+      data['modifiedAt'] = moment();
+      const activityUpdation = await this.activityRepository.updateActivity({
         where: {
           id,
         },

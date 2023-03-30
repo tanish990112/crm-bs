@@ -14,8 +14,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { Login } from 'src/common/common.dto';
 import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
-import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
+import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
