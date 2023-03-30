@@ -52,10 +52,10 @@ export class LeadRepository {
 
   async updateLeadDetails(query: Prisma.LeadUpdateArgs) {
     try {
-      const leadUpdation = await this.prisma.lead.update({
+      const leadUpdated = await this.prisma.lead.update({
         ...query,
       });
-      return leadUpdation;
+      return leadUpdated;
     } catch (error) {
       throw error;
     }

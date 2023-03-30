@@ -56,23 +56,4 @@ export class AuthController {
       );
     }
   }
-
-  @Get('protect')
-  @Roles(Role.ADMIN)
-  @ApiBearerAuth('Authorization')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  getProtect(@Request() req: any) {
-    if (req.user)
-      return new APIResponse(
-        Constants.statusCodes.OK,
-        Constants.messages.SUCCESS,
-        req.user,
-      );
-    else
-      return new APIResponse(
-        Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
-        null,
-      );
-  }
 }

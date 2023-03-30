@@ -231,11 +231,11 @@ export class LeadService {
     }
   }
 
-  async updateLead(leadId: string, data: any) {
+  async updateLead(leadId: string, updatedData: any) {
     try {
       const leadUpdate = await this.leadRepository.updateLeadDetails({
         where: { leadId },
-        data,
+        data: updatedData,
       });
       if (!leadUpdate) {
         return {
