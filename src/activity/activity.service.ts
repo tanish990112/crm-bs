@@ -107,7 +107,7 @@ export class ActivityService {
           data: data,
         };
     } catch (error) {
-      console.log(error.message, 'Error Message');
+      console.log(error, 'Error Message');
       throw error;
     }
   }

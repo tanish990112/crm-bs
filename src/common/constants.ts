@@ -26,6 +26,7 @@ export const Constants = {
     SOMETHING_WENT_WRONG: 'Something went wrong',
     INTERNAL_SERVER_ERROR: 'Internal server error',
     LEAD_EXIST: 'Lead with this contact already exist',
+    ACCOUNT_ALREADY_EXISTS: 'Account with this name already exists',
     USER_ALREADY_EXIST: 'User with this email or phone already exist',
   },
 

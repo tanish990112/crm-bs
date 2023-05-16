@@ -148,7 +148,7 @@ export class AdminService {
         data: user,
       };
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       throw error;
     }
   }
@@ -214,7 +214,7 @@ export class AdminService {
         data: deleteUser,
       };
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       throw error;
     }
   }

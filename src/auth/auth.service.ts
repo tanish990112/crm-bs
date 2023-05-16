@@ -81,6 +81,7 @@ export class AuthService {
           phone: true,
           role: true,
           parent: true,
+          token: true,
         },
       });
 

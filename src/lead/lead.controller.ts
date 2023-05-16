@@ -96,12 +96,17 @@ export class LeadController {
     @LeadUpdateObject() leadUpdateObject,
   ) {
     try {
+      leadData?.accountId
+        ? (leadUpdateObject.accountId = leadData.accountId)
+        : (leadUpdateObject = leadUpdateObject);
       const { statusCode, message, data } = await this.leadService.updateLead(
         leadId,
         leadUpdateObject,
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      console.log(error, '++++++++');
+
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
         Constants.messages.INTERNAL_SERVER_ERROR,

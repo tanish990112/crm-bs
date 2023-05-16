@@ -42,7 +42,7 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
 
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
