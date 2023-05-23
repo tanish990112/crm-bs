@@ -70,6 +70,45 @@ export const ConfigData = {
     { label: 'Technical Interview' },
     { label: 'Face to Face meeting' },
   ],
+
+  accountRating: [
+    { label: 'None' },
+    { label: 'Active' },
+    { label: 'Inactive' },
+    { label: 'Project Cancelled' },
+    { label: 'Dropped' },
+  ],
+
+  accountType: [
+    { label: 'None' },
+    { label: 'Client' },
+    { label: 'End Client' },
+  ],
+
+  accountIndustry: [
+    { label: 'None' },
+    { label: 'IT Services and Consulting' },
+    { label: 'Software Development' },
+    { label: 'Outsourcing' },
+    { label: 'Hospitals and Health Care' },
+    { label: 'Advertising Services' },
+    { label: 'Finance' },
+    { label: 'Government/Military' },
+    { label: 'Large Enterprise' },
+    { label: 'ManagementISV' },
+    { label: 'MSP(Management Service Provider)' },
+    { label: 'Network Equipment Enterprise' },
+    { label: 'Non-managementISV' },
+    { label: 'Optical Netwrrking' },
+    { label: 'Service Provider' },
+    { label: 'Small/Medium Enterprise' },
+    { label: 'Storage Equipment' },
+    { label: 'Storage Service Provider' },
+    { label: 'Systems Integrator' },
+    { label: 'Wireless Industry' },
+  ],
+
+  accountOwner: [{ label: 'Bonami Software' }],
 };
 
 export const adminData = {
