@@ -14,7 +14,7 @@ export class AccountService {
       });
       if (accountExist?.accountId) {
         return {
-          statusCode: Constants.statusCodes.FORBIDDEN,
+          statusCode: Constants.statusCodes.OK,
           message: Constants.messages.ACCOUNT_ALREADY_EXISTS,
           data: accountExist,
         };
@@ -50,7 +50,7 @@ export class AccountService {
       const allAccounts = await this.accountRepository.getAllAccounts({
         select: accountSelectData,
       });
-      if (allAccounts.length !== 0) {
+      if (allAccounts) {
         return {
           statusCode: Constants.statusCodes.OK,
           message: Constants.messages.SUCCESS,
