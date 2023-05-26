@@ -1,7 +1,11 @@
 import { DealService } from './deal.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateDealDto, updateDealDto } from './dto/deal.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 import { Constants } from 'src/common/constants';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { APIResponse } from 'src/common/response';
@@ -15,14 +19,18 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('Deal')
-// @ApiBearerAuth('Authorization')
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
+@ApiBearerAuth('Authorization')
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class DealController {
   constructor(private dealService: DealService) {}
 
   @Post('createDeal')
+  @Roles(Role.ADMIN, Role.STAFF)
+  @ApiCreatedResponse({ type: CreateDealDto })
   async createDeal(@Body() dealDto: CreateDealDto) {
     try {
       const { statusCode, message, data } = await this.dealService.createDeal(
@@ -41,6 +49,8 @@ export class DealController {
   }
 
   @Get('allDeals')
+  @Roles(Role.ADMIN, Role.STAFF)
+  @ApiOkResponse({ type: [CreateDealDto] })
   async getAllDeals() {
     try {
       const { statusCode, message, data } =
@@ -55,8 +65,8 @@ export class DealController {
     }
   }
   @Get('deal')
-  // @Roles(Role.ADMIN, Role.STAFF)
-  // @ApiOkResponse({ type: CreateAccountDto })
+  @Roles(Role.ADMIN, Role.STAFF)
+  @ApiOkResponse({ type: CreateDealDto })
   async getDeal(@Query('dealId') dealId: number) {
     try {
       const { statusCode, message, data } = await this.dealService.getDeal(
@@ -75,8 +85,8 @@ export class DealController {
   }
 
   @Patch('updateDeal')
-  // @Roles(Role.ADMIN, Role.STAFF)
-  // @ApiOkResponse({ type: updateAccountDto })
+  @Roles(Role.ADMIN, Role.STAFF)
+  @ApiOkResponse({ type: updateDealDto })
   async updateDeal(
     @Body() toUpdate: updateDealDto,
     @Query('dealId') dealId: number,
@@ -99,7 +109,7 @@ export class DealController {
   }
 
   @Delete('deleteDeal')
-  // @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN)
   async deleteDeal(@Query('dealId') dealId: number) {
     try {
       const { statusCode, message, data } = await this.dealService.deleteDeal(
