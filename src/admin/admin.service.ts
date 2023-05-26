@@ -20,7 +20,7 @@ export class AdminService {
         });
       } else {
         const userDetails = await this.userRepository.findUniqueBy({
-          where: { userId: userId },
+          where: { userId: +userId },
           select: userSelect,
         });
         const parentDetails =

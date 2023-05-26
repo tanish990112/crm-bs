@@ -92,8 +92,7 @@ export class AccountController {
         await this.accountService.updateAccount(accountId, toUpdate);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error);
-
+      console.log(error, 'errr');
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
         Constants.messages.FAILURE,
