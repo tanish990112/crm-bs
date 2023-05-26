@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAccountDto {
   @IsString()
@@ -64,21 +64,25 @@ export class CreateAccountDto {
 export class updateAccountDto {
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   accountName?: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   accountType?: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   accountOwner?: string;
 
   @IsNumber()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   handlerId?: number;
 
@@ -89,34 +93,40 @@ export class updateAccountDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   rating?: string;
 
   @IsNumber()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   Employees?: number;
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   billingCountry?: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional()
   billingState?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiPropertyOptional()
-  leadId?: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @ApiPropertyOptional()
+  // leadId?: string;
 
   @IsNumber()
+  @IsOptional()
   @ApiPropertyOptional()
   annualRevenue?: number;
 
-  @ApiPropertyOptional()
   @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
   description?: string;
 }

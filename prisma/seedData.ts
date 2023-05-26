@@ -1,12 +1,4 @@
 export const ConfigData = {
-  leadSource: [
-    { label: 'UpWork ' },
-    { label: 'LinkedIn ' },
-    { label: 'Google ' },
-    { label: 'SEO Tool ' },
-    { label: 'External Referral' },
-  ],
-
   leadStatus: [
     {
       label: 'Attempted to Contact',
@@ -72,21 +64,15 @@ export const ConfigData = {
   ],
 
   accountRating: [
-    { label: 'None' },
     { label: 'Active' },
     { label: 'Inactive' },
     { label: 'Project Cancelled' },
     { label: 'Dropped' },
   ],
 
-  accountType: [
-    { label: 'None' },
-    { label: 'Client' },
-    { label: 'End Client' },
-  ],
+  accountType: [{ label: 'Client' }, { label: 'End Client' }],
 
   accountIndustry: [
-    { label: 'None' },
     { label: 'IT Services and Consulting' },
     { label: 'Software Development' },
     { label: 'Outsourcing' },
@@ -109,6 +95,41 @@ export const ConfigData = {
   ],
 
   accountOwner: [{ label: 'Bonami Software' }],
+
+  dealStage: [
+    { label: 'Qualification' },
+    { label: 'Need Analysis' },
+    { label: 'Value Proposition' },
+    { label: 'Identify Decision Makers' },
+    { label: 'Proposal/Price Quote' },
+    { label: 'Negotiation/Review' },
+    { label: 'Closed Won' },
+    { label: 'Closed Lost' },
+    { label: 'Close-Lost to Competition' },
+  ],
+
+  dealType: [{ label: 'Existing Business' }, { label: 'New Business' }],
+
+  leadSource: [
+    { label: 'Advertisement' },
+    { label: 'Cold Call' },
+    { label: 'Employee Referral' },
+    { label: 'External Referral' },
+    { label: 'Online Store' },
+    { label: 'Partner' },
+    { label: 'Sales Email Alias' },
+    { label: 'Seminar Partner' },
+    { label: 'Internal Seminar' },
+    { label: 'Trade Show' },
+    { label: 'Web Download' },
+    { label: 'Web Research' },
+    { label: 'Chat' },
+    { label: 'UpWork ' },
+    { label: 'LinkedIn ' },
+    { label: 'Google ' },
+    { label: 'SEO Tool ' },
+    { label: 'External Referral' },
+  ],
 };
 
 export const adminData = {

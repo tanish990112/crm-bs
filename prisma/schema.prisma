@@ -73,6 +73,7 @@ model Users {
   token      String?
   parent     Int?
   account    Account[]
+  Deal       Deal[]
 }
 
 model Config {
@@ -97,5 +98,24 @@ model Account {
   billingState   String
   leadId         Lead[]
   annualRevenue  Decimal @default(0)
-  description    String
+  description    String?
+  Deal           Deal[]
+}
+
+model Deal {
+  dealId           Int       @id @default(autoincrement())
+  dealOwner        String
+  dealName         String
+  closedBy         Users     @relation(fields: [closedById], references: [userId])
+  closedById       Int
+  resourceDeployed String
+  account          Account   @relation(fields: [accountName], references: [accountName])
+  accountName      String
+  type             String
+  leadSource       String
+  closingDate      DateTime
+  projectEndedOn   DateTime?
+  stage            String
+  revenueGenerated Decimal   @default(0)
+  description      String?
 }

@@ -7,6 +7,7 @@ import { AdminModule } from './admin/admin.module';
 import { AccountModule } from './account/account.module';
 import { ActivityModule } from './activity/activity.module';
 import { RepositoryModule } from './repository/repository.module';
+import { DealModule } from './deal/deal.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RepositoryModule } from './repository/repository.module';
     AdminModule,
     ActivityModule,
     AccountModule,
+    DealModule,
     RepositoryModule,
   ],
   controllers: [AppController],

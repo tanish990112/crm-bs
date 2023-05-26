@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DbModule } from 'src/db/db.module';
 import { LeadRepository } from './lead/lead.repository';
+import { DealRepository } from './deal/deal.repository';
 import { UsersRepository } from './users/users.repository';
 import { ConfigRepository } from './config/config.repository';
 import { AccountRepository } from './account/account.repository';
@@ -16,6 +17,7 @@ import { ActivityRepository } from './activity/activity.repository';
     ContactRepository,
     ActivityRepository,
     AccountRepository,
+    DealRepository,
   ],
   exports: [
     LeadRepository,
@@ -24,6 +26,7 @@ import { ActivityRepository } from './activity/activity.repository';
     ContactRepository,
     ActivityRepository,
     AccountRepository,
+    DealRepository,
   ],
 })
 export class RepositoryModule {}

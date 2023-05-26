@@ -91,15 +91,12 @@ export class AccountService {
     }
   }
 
-  async updateAccount(accountName: string, data: any) {
+  async updateAccount(accountId: number, data: any) {
     try {
-      const { handlerId, leadId, ...accountDataObj } = data;
+      const { handlerId, ...accountDataObj } = data;
       accountDataObj['handler'] = { connect: { userId: handlerId } };
-      accountDataObj['leadId'] = {
-        connect: { leadId: leadId },
-      };
       const accountUpdation = await this.accountRepository.updateAccount({
-        where: { accountName },
+        where: { accountId: +accountId },
         data: data,
       });
       if (accountUpdation?.accountId)

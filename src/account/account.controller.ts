@@ -3,8 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  Patch,
   Post,
-  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -80,22 +80,24 @@ export class AccountController {
     }
   }
 
-  @Put('updateAccount')
+  @Patch('updateAccount')
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: updateAccountDto })
   async updateAccount(
     @Body() toUpdate: updateAccountDto,
-    @Query('accountName') accountName: string,
+    @Query('accountId') accountId: number,
   ) {
     try {
       const { statusCode, message, data } =
-        await this.accountService.updateAccount(accountName, toUpdate);
+        await this.accountService.updateAccount(accountId, toUpdate);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      console.log(error);
+
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
         Constants.messages.FAILURE,
-        null,
+        error.message,
       );
     }
   }
