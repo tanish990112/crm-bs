@@ -11,16 +11,17 @@ export class AdminService {
     private leadRepository: LeadRepository,
   ) {}
 
-  async getUsers(userId?: number) {
+  async getUsers(id?: string) {
     try {
       let users = null;
+      const userId = parseInt(id);
       if (!userId) {
         users = await this.userRepository.findUsers({
           select: userSelect,
         });
       } else {
         const userDetails = await this.userRepository.findUniqueBy({
-          where: { userId: +userId },
+          where: { userId: userId },
           select: userSelect,
         });
         const parentDetails =

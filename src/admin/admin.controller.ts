@@ -34,7 +34,7 @@ export class AdminController {
   @ApiQuery({ name: 'userId', required: false, type: Number })
   @ApiOkResponse({ type: [UserDetailsDto] })
   async getUsers(
-    @Query('userId') userId?: number,
+    @Query('userId') userId?: string,
   ): Promise<APIResponse | null> {
     try {
       const { statusCode, message, data } = await this.adminServices.getUsers(

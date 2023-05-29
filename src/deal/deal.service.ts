@@ -9,8 +9,6 @@ export class DealService {
 
   async createDeal(data: CreateDealDto) {
     try {
-      console.log('Inside of service');
-
       const creatingDeal = await this.dealRepository.createDeal({ data });
       if (creatingDeal.dealId) {
         return {
@@ -53,15 +51,13 @@ export class DealService {
     }
   }
 
-  async getDeal(id: number) {
+  async getDeal(id: string) {
     try {
-      const dealId = +id;
+      const dealId = parseInt(id);
       const deal = await this.dealRepository.getDeal({
         where: { dealId },
         select: dealSelectData,
       });
-      console.log(deal);
-
       if (deal?.dealId) {
         return {
           statusCode: Constants.statusCodes.OK,
@@ -79,11 +75,9 @@ export class DealService {
     }
   }
 
-  async updateDeal(id: number, data: any) {
+  async updateDeal(id: string, data: any) {
     try {
-      const dealId = +id;
-      console.log(typeof dealId, dealId);
-
+      const dealId = parseInt(id);
       const dealUpdation = await this.dealRepository.updateDeal({
         where: { dealId },
         data: data,
@@ -105,9 +99,9 @@ export class DealService {
     }
   }
 
-  async deleteDeal(id: number) {
+  async deleteDeal(id: string) {
     try {
-      const dealId = +id;
+      const dealId = parseInt(id);
       const deletingDeal = await this.dealRepository.deleteDeal({
         where: { dealId },
       });

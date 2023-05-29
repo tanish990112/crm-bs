@@ -67,7 +67,7 @@ export class DealController {
   @Get('deal')
   @Roles(Role.ADMIN, Role.STAFF)
   @ApiOkResponse({ type: CreateDealDto })
-  async getDeal(@Query('dealId') dealId: number) {
+  async getDeal(@Query('dealId') dealId: string) {
     try {
       const { statusCode, message, data } = await this.dealService.getDeal(
         dealId,
@@ -89,7 +89,7 @@ export class DealController {
   @ApiOkResponse({ type: updateDealDto })
   async updateDeal(
     @Body() toUpdate: updateDealDto,
-    @Query('dealId') dealId: number,
+    @Query('dealId') dealId: string,
   ) {
     try {
       const { statusCode, message, data } = await this.dealService.updateDeal(
@@ -110,7 +110,7 @@ export class DealController {
 
   @Delete('deleteDeal')
   @Roles(Role.ADMIN)
-  async deleteDeal(@Query('dealId') dealId: number) {
+  async deleteDeal(@Query('dealId') dealId: string) {
     try {
       const { statusCode, message, data } = await this.dealService.deleteDeal(
         dealId,
