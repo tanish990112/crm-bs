@@ -1,14 +1,24 @@
 import { Module } from '@nestjs/common';
-import { DbModule } from './db/db.module';
 import { AppService } from './app.service';
 import { LeadModule } from './lead/lead.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AdminModule } from './admin/admin.module';
+import { AccountModule } from './account/account.module';
 import { ActivityModule } from './activity/activity.module';
+import { RepositoryModule } from './repository/repository.module';
+import { DealModule } from './deal/deal.module';
 
 @Module({
-  imports: [LeadModule, AdminModule, ActivityModule, DbModule, AuthModule],
+  imports: [
+    AuthModule,
+    LeadModule,
+    AdminModule,
+    ActivityModule,
+    AccountModule,
+    DealModule,
+    RepositoryModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

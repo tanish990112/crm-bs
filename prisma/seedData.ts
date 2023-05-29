@@ -1,12 +1,4 @@
 export const ConfigData = {
-  leadSource: [
-    { label: 'UpWork ' },
-    { label: 'LinkedIn ' },
-    { label: 'Google ' },
-    { label: 'SEO Tool ' },
-    { label: 'External Referral' },
-  ],
-
   leadStatus: [
     {
       label: 'Attempted to Contact',
@@ -69,6 +61,74 @@ export const ConfigData = {
     { label: 'Dev Screening' },
     { label: 'Technical Interview' },
     { label: 'Face to Face meeting' },
+  ],
+
+  accountRating: [
+    { label: 'Active' },
+    { label: 'Inactive' },
+    { label: 'Project Cancelled' },
+    { label: 'Dropped' },
+  ],
+
+  accountType: [{ label: 'Client' }, { label: 'End Client' }],
+
+  accountIndustry: [
+    { label: 'IT Services and Consulting' },
+    { label: 'Software Development' },
+    { label: 'Outsourcing' },
+    { label: 'Hospitals and Health Care' },
+    { label: 'Advertising Services' },
+    { label: 'Finance' },
+    { label: 'Government/Military' },
+    { label: 'Large Enterprise' },
+    { label: 'ManagementISV' },
+    { label: 'MSP(Management Service Provider)' },
+    { label: 'Network Equipment Enterprise' },
+    { label: 'Non-managementISV' },
+    { label: 'Optical Netwrrking' },
+    { label: 'Service Provider' },
+    { label: 'Small/Medium Enterprise' },
+    { label: 'Storage Equipment' },
+    { label: 'Storage Service Provider' },
+    { label: 'Systems Integrator' },
+    { label: 'Wireless Industry' },
+  ],
+
+  accountOwner: [{ label: 'Bonami Software' }],
+
+  dealStage: [
+    { label: 'Qualification' },
+    { label: 'Need Analysis' },
+    { label: 'Value Proposition' },
+    { label: 'Identify Decision Makers' },
+    { label: 'Proposal/Price Quote' },
+    { label: 'Negotiation/Review' },
+    { label: 'Closed Won' },
+    { label: 'Closed Lost' },
+    { label: 'Close-Lost to Competition' },
+  ],
+
+  dealType: [{ label: 'Existing Business' }, { label: 'New Business' }],
+
+  leadSource: [
+    { label: 'Advertisement' },
+    { label: 'Cold Call' },
+    { label: 'Employee Referral' },
+    { label: 'External Referral' },
+    { label: 'Online Store' },
+    { label: 'Partner' },
+    { label: 'Sales Email Alias' },
+    { label: 'Seminar Partner' },
+    { label: 'Internal Seminar' },
+    { label: 'Trade Show' },
+    { label: 'Web Download' },
+    { label: 'Web Research' },
+    { label: 'Chat' },
+    { label: 'UpWork ' },
+    { label: 'LinkedIn ' },
+    { label: 'Google ' },
+    { label: 'SEO Tool ' },
+    { label: 'External Referral' },
   ],
 };
 

@@ -32,6 +32,8 @@ model Lead {
   leadSourcer       Users      @relation(fields: [leadSourcerUserId], references: [userId])
   leadSourcerUserId Int
   accountStatus     Int?       @default(0)
+  account           Account?   @relation(fields: [accountId], references: [accountId])
+  accountId         Int?
 }
 
 model Activity {
@@ -70,6 +72,8 @@ model Users {
   role       String
   token      String?
   parent     Int?
+  account    Account[]
+  Deal       Deal[]
 }
 
 model Config {
@@ -78,4 +82,40 @@ model Config {
   type        String
   label       String  @unique
   information String?
+}
+
+model Account {
+  accountId      Int     @id @default(autoincrement())
+  accountName    String  @unique
+  accountType    String
+  accountOwner   String
+  handler        Users   @relation(fields: [handlerId], references: [userId])
+  handlerId      Int
+  foundedIn      String
+  rating         String
+  Employees      Int
+  billingCountry String
+  billingState   String
+  leadId         Lead[]
+  annualRevenue  Decimal @default(0)
+  description    String?
+  Deal           Deal[]
+}
+
+model Deal {
+  dealId           Int       @id @default(autoincrement())
+  dealOwner        String
+  dealName         String
+  closedBy         Users     @relation(fields: [closedById], references: [userId])
+  closedById       Int
+  resourceDeployed String
+  account          Account   @relation(fields: [accountName], references: [accountName])
+  accountName      String
+  type             String
+  leadSource       String
+  closingDate      DateTime
+  projectEndedOn   DateTime?
+  stage            String
+  revenueGenerated Decimal   @default(0)
+  description      String?
 }

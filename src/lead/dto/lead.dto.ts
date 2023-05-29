@@ -1,11 +1,17 @@
 import {
+  IsObject,
+  IsString,
+  IsNumber,
+  ValidateNested,
+  IsOptional,
+} from 'class-validator';
+import {
   CreateContactDto,
   ListContactDto,
   UpdateContactDto,
 } from '../../contacts/dto/contact.dto';
-import { IsObject, IsString, IsNumber, ValidateNested } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 class LeadSourcerIdDto {
   @IsNumber()
@@ -114,6 +120,11 @@ export class UpdateLeadDto {
   @IsObject()
   @ApiProperty()
   leadData: LeadDataDto;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional()
+  accountId?: number;
 
   @IsObject()
   @ApiPropertyOptional()

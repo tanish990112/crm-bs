@@ -6,7 +6,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Role } from '../../auth/role.enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 class Users {
   @IsEmail()
@@ -27,7 +26,7 @@ class Users {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  role: Role;
+  role: string;
 
   @IsNumber()
   @IsNotEmpty()

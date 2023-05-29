@@ -14,8 +14,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { Login } from 'src/common/common.dto';
 import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
-import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
+import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -55,24 +55,5 @@ export class AuthController {
         null,
       );
     }
-  }
-
-  @Get('protect')
-  @Roles(Role.ADMIN)
-  @ApiBearerAuth('Authorization')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  getProtect(@Request() req: any) {
-    if (req.user)
-      return new APIResponse(
-        Constants.statusCodes.OK,
-        Constants.messages.SUCCESS,
-        req.user,
-      );
-    else
-      return new APIResponse(
-        Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
-        null,
-      );
   }
 }

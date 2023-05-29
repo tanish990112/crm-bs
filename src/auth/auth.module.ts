@@ -1,10 +1,10 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
-import { DbModule } from 'src/db/db.module';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './local.stratergy';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
+import { RepositoryModule } from 'src/repository/repository.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { AuthController } from './auth.controller';
       secret: 'secretKey',
       signOptions: { expiresIn: '365d' },
     }),
-    DbModule,
+    RepositoryModule,
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

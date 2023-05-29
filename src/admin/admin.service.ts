@@ -1,28 +1,33 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
-import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
 import { Constants } from 'src/common/constants';
+import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
+import { LeadRepository } from 'src/repository/lead/lead.repository';
+import { UsersRepository } from 'src/repository/users/users.repository';
 @Injectable()
 export class AdminService {
-  constructor(private prisma: DbService) {}
+  constructor(
+    private userRepository: UsersRepository,
+    private leadRepository: LeadRepository,
+  ) {}
 
-  async getUsers(userId?: number) {
+  async getUsers(id?: string) {
     try {
       let users = null;
+      const userId = parseInt(id);
       if (!userId) {
-        users = await this.prisma.users.findMany({
+        users = await this.userRepository.findUsers({
           select: userSelect,
         });
       } else {
-        const userDetails = await this.prisma.users.findFirst({
-          where: { userId: +userId },
+        const userDetails = await this.userRepository.findUniqueBy({
+          where: { userId: userId },
           select: userSelect,
         });
         const parentDetails =
           userDetails &&
           userDetails.parent &&
-          (await this.prisma.users.findUnique({
+          (await this.userRepository.findUniqueBy({
             where: { userId: userDetails.parent },
             select: {
               name: true,
@@ -34,35 +39,35 @@ export class AdminService {
           email: userDetails.email,
           phone: userDetails.phone,
           role: userDetails.role,
+          parent: parentDetails
+            ? {
+                parentId: userDetails.parent,
+                parentName: parentDetails.name,
+              }
+            : null,
         };
-
-        users.parent = parentDetails
-          ? {
-              parentId: userDetails.parent,
-              parentName: parentDetails.name,
-            }
-          : null;
       }
-      return users
-        ? {
-            statusCode: Constants.statusCodes.OK,
-            message: Constants.messages.SUCCESS,
-            data: users,
-          }
-        : {
-            statusCode: Constants.statusCodes.OK,
-            message: Constants.messages.NO_DATA_FOUND,
-            data: null,
-          };
+
+      if (!users) {
+        return {
+          statusCode: Constants.statusCodes.OK,
+          message: Constants.messages.NO_DATA_FOUND,
+          data: null,
+        };
+      }
+      return {
+        statusCode: Constants.statusCodes.OK,
+        message: Constants.messages.SUCCESS,
+        data: users,
+      };
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
 
   async createUser(data: CreateUserDto) {
     try {
-      const checkUser = await this.prisma.users.findFirst({
+      const checkUser = await this.userRepository.findUserBy({
         where: {
           OR: [{ email: data.email }, { phone: data.phone }],
         },
@@ -75,10 +80,19 @@ export class AdminService {
           data: null,
         };
 
+      if (!Object.values(Constants.roles).includes(data.role)) {
+        return {
+          statusCode: Constants.statusCodes.BAD_REQUEST,
+          message: Constants.messages.WRONG_DATA,
+          data: null,
+        };
+      }
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword;
-      const user = await this.prisma.users.create({ data });
-      delete user.password;
+      const user = await this.userRepository.createUser({
+        select: userSelect,
+        data,
+      });
       if (!user) {
         return {
           statusCode: Constants.statusCodes.BAD_GATEWAY,
@@ -92,14 +106,13 @@ export class AdminService {
         data: user,
       };
     } catch (error) {
-      console.log(error.message);
       throw error;
     }
   }
 
-  async updateUser(data: UpdateUserDto) {
+  async updateUser(userData: UpdateUserDto) {
     try {
-      const userToUpdate = data && data.userId ? data.userId : null;
+      const userToUpdate = userData && userData.userId ? userData.userId : null;
 
       if (!userToUpdate) {
         return {
@@ -109,19 +122,19 @@ export class AdminService {
         };
       }
 
-      if (data.password) {
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        data.password = hashedPassword;
+      if (userData.password) {
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        userData.password = hashedPassword;
       }
 
-      delete data.userId;
-      data?.token && delete data.token;
+      delete userData.userId;
+      userData?.token && delete userData.token;
 
-      const user = await this.prisma.users.update({
+      const user = await this.userRepository.updateUser({
         where: { userId: userToUpdate },
-        data: data,
+        select: userSelect,
+        data: userData,
       });
-      delete user.password;
 
       if (!user) {
         return {
@@ -136,14 +149,14 @@ export class AdminService {
         data: user,
       };
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       throw error;
     }
   }
 
   async deleteUser(userId: number) {
     try {
-      const checkUser = await this.prisma.users.findUnique({
+      const checkUser = await this.userRepository.findUniqueBy({
         where: {
           userId: userId,
         },
@@ -157,7 +170,7 @@ export class AdminService {
         };
       }
 
-      const admin = await this.prisma.users.findFirst({
+      const admin = await this.userRepository.findUserBy({
         where: { role: Constants.roles.admin },
       });
 
@@ -169,7 +182,7 @@ export class AdminService {
         };
       }
 
-      const updateLeads = await this.prisma.lead.updateMany({
+      const updateLeads = await this.leadRepository.updateMultipleLeads({
         where: { leadSourcerUserId: checkUser.userId },
         data: { leadSourcerUserId: admin.userId },
       });
@@ -182,10 +195,11 @@ export class AdminService {
         };
       }
 
-      const deleteUser = await this.prisma.users.delete({
+      const deleteUser = await this.userRepository.deleteUser({
         where: {
           userId: userId,
         },
+        select: userSelect,
       });
 
       if (!deleteUser) {
@@ -195,15 +209,13 @@ export class AdminService {
           data: null,
         };
       }
-      delete deleteUser.password;
-      delete deleteUser.token;
       return {
         statusCode: Constants.statusCodes.OK,
         message: Constants.messages.SUCCESS,
         data: deleteUser,
       };
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       throw error;
     }
   }
