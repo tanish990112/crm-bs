@@ -1,7 +1,14 @@
 import {
+  AddAccount,
+  CreateLeadDto,
+  ListLeadDto,
+  UpdateLeadDto,
+} from './dto/lead.dto';
+import {
   Body,
   Controller,
   Get,
+  Patch,
   Post,
   Put,
   Query,
@@ -22,7 +29,6 @@ import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { LeadUpdateObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
-import { CreateLeadDto, ListLeadDto, UpdateLeadDto } from './dto/lead.dto';
 
 @Controller('lead')
 @ApiBearerAuth('Authorization')
@@ -107,6 +113,24 @@ export class LeadController {
     } catch (error) {
       console.log(error, '++++++++');
 
+      return new APIResponse(
+        Constants.statusCodes.INTERNAL_SERVER_ERROR,
+        Constants.messages.INTERNAL_SERVER_ERROR,
+        null,
+      );
+    }
+  }
+
+  @Patch('addAccount')
+  async addAccountInLead(
+    @Body() leadData: AddAccount,
+    @Query('leadId') leadId: string,
+  ) {
+    try {
+      const { statusCode, message, data } =
+        await this.leadService.addAccountInLead(leadId, leadData);
+      return new APIResponse(statusCode, message, data);
+    } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
         Constants.messages.INTERNAL_SERVER_ERROR,
