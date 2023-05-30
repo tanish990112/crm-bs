@@ -20,14 +20,17 @@ import { Roles } from 'src/auth/roles.decorator';
 import { AccountService } from './account.sevice';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { APIResponse } from 'src/common/response';
+import { MyLogger } from 'src/logger/logger.service';
 import { CreateAccountDto, updateAccountDto } from './dto/account.dto';
 
 @Controller('account')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class AccountController {
-  constructor(private accountService: AccountService) {}
-
+  constructor(
+    private accountService: AccountService,
+    private myLogger: MyLogger,
+  ) {}
   @Post('createAccount')
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
   @ApiCreatedResponse({ type: CreateAccountDto })
@@ -37,10 +40,10 @@ export class AccountController {
         await this.accountService.createAccount(accountDto);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error, '-------------');
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.FAILURE,
+        error,
         null,
       );
     }
@@ -55,9 +58,10 @@ export class AccountController {
         await this.accountService.getAllAccounts();
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.FAILURE,
+        error,
         null,
       );
     }
@@ -72,9 +76,10 @@ export class AccountController {
         await this.accountService.getAccount(accountName);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.FAILURE,
+        error,
         null,
       );
     }
@@ -92,11 +97,11 @@ export class AccountController {
         await this.accountService.updateAccount(accountId, toUpdate);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error, 'errr');
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.FAILURE,
-        error.message,
+        error,
+        toUpdate,
       );
     }
   }
@@ -109,9 +114,10 @@ export class AccountController {
         await this.accountService.deleteAccount(accountName);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.FAILURE,
+        error,
         null,
       );
     }

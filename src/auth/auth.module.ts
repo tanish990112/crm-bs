@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './local.stratergy';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
+import { LoggerModule } from 'src/logger/logger.module';
 import { RepositoryModule } from 'src/repository/repository.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { RepositoryModule } from 'src/repository/repository.module';
       signOptions: { expiresIn: '365d' },
     }),
     RepositoryModule,
+    LoggerModule,
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

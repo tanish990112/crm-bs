@@ -22,13 +22,17 @@ import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { CreateUserDto, UpdateUserDto, UserDetailsDto } from './dto/users.dto';
+import { MyLogger } from 'src/logger/logger.service';
 
 @Controller('admin')
 @Roles(Role.ADMIN)
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class AdminController {
-  constructor(private adminServices: AdminService) {}
+  constructor(
+    private adminServices: AdminService,
+    private myLogger: MyLogger,
+  ) {}
 
   @Get('users')
   @ApiQuery({ name: 'userId', required: false, type: Number })
@@ -42,11 +46,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error);
-
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -63,9 +66,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -82,9 +86,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -101,9 +106,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }

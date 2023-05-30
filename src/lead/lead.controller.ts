@@ -29,13 +29,14 @@ import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { LeadUpdateObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
+import { MyLogger } from 'src/logger/logger.service';
 
 @Controller('lead')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(Role.ADMIN, Role.STAFF, Role.USER)
 export class LeadController {
-  constructor(private leadService: LeadService) {}
+  constructor(private leadService: LeadService, private myLogger: MyLogger) {}
 
   @Get('getLeads')
   @ApiOkResponse({ type: [CreateLeadDto] })
@@ -50,9 +51,10 @@ export class LeadController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -69,9 +71,10 @@ export class LeadController {
         await this.leadService.getLeadDetails(leadId, req.user);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -86,9 +89,10 @@ export class LeadController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -111,11 +115,10 @@ export class LeadController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error, '++++++++');
-
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -131,9 +134,10 @@ export class LeadController {
         await this.leadService.addAccountInLead(leadId, leadData);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }

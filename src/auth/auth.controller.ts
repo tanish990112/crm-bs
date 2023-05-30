@@ -14,12 +14,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { Login } from 'src/common/common.dto';
 import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
+import { MyLogger } from 'src/logger/logger.service';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
 import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private myLogger: MyLogger) {}
 
   @Post('login')
   @ApiCreatedResponse({ type: UserDetailsDto })
@@ -30,9 +31,10 @@ export class AuthController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -49,9 +51,10 @@ export class AuthController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
