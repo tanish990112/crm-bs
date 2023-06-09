@@ -22,8 +22,8 @@ import { Constants } from 'src/common/constants';
 import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { CreateUserDto, UpdateUserDto, UserDetailsDto } from './dto/users.dto';
 import { MyLogger } from 'src/logger/logger.service';
+import { CreateUserDto, UpdateUserDto, UserDetailsDto } from './dto/users.dto';
 
 @ApiTags('Admin')
 @Roles(Role.ADMIN)
