@@ -253,6 +253,29 @@ export class LeadService {
       throw error;
     }
   }
+
+  async addAccountInLead(leadId: string, updatedData: any) {
+    try {
+      const addingAccount = await this.leadRepository.updateLeadDetails({
+        where: { leadId },
+        data: updatedData,
+      });
+      if (!addingAccount) {
+        return {
+          statusCode: Constants.statusCodes.BAD_GATEWAY,
+          message: Constants.messages.FAILURE,
+          data: null,
+        };
+      }
+      return {
+        statusCode: Constants.statusCodes.OK,
+        message: Constants.messages.SUCCESS,
+        data: addingAccount,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 const selectLeadDetails = {

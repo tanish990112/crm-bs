@@ -130,3 +130,9 @@ export class UpdateLeadDto {
   @ApiPropertyOptional()
   contactInfo: UpdateContactDto;
 }
+
+export class AddAccount {
+  @IsNumber()
+  @ApiPropertyOptional()
+  accountId: number;
+}

@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsNumberString,
 } from 'class-validator';
+import { Optional } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreateContactDto {
   create: ListContactDto;
@@ -37,7 +38,7 @@ export class ListContactDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @Optional()
   @ApiPropertyOptional()
   skypeId?: string;
 }

@@ -13,6 +13,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,14 +22,19 @@ import { Constants } from 'src/common/constants';
 import { Roles } from 'src/auth/roles.decorator';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { MyLogger } from 'src/logger/logger.service';
 import { CreateUserDto, UpdateUserDto, UserDetailsDto } from './dto/users.dto';
 
-@Controller('admin')
+@ApiTags('Admin')
 @Roles(Role.ADMIN)
+@Controller('admin')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class AdminController {
-  constructor(private adminServices: AdminService) {}
+  constructor(
+    private adminServices: AdminService,
+    private myLogger: MyLogger,
+  ) {}
 
   @Get('users')
   @ApiQuery({ name: 'userId', required: false, type: Number })
@@ -42,11 +48,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
-      console.log(error);
-
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -63,9 +68,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -82,9 +88,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -101,9 +108,10 @@ export class AdminController {
       );
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }

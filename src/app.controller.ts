@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Constants } from './common/constants';
 import { APIResponse } from './common/response';
@@ -7,6 +8,7 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @ApiTags('Config')
   @Get('/config')
   async getConfigs(): Promise<APIResponse | null> {
     try {

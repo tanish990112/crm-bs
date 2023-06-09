@@ -12,6 +12,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
   ActivityDetails,
@@ -25,12 +26,17 @@ import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { ActivityService } from './activity.service';
+import { MyLogger } from 'src/logger/logger.service';
 
+@ApiTags('Activity')
 @Controller('activity')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class ActivityController {
-  constructor(private activityService: ActivityService) {}
+  constructor(
+    private activityService: ActivityService,
+    private myLogger: MyLogger,
+  ) {}
 
   @Post('createActivity')
   @Roles(Role.ADMIN, Role.STAFF, Role.USER)
@@ -41,9 +47,10 @@ export class ActivityController {
         await this.activityService.createActivity(activityInfo);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -61,9 +68,10 @@ export class ActivityController {
         await this.activityService.getAllActivities(leadId);
       return new APIResponse(statusCode, message, data);
     } catch (error) {
+      this.myLogger.error(error);
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -82,7 +90,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
@@ -102,7 +110,7 @@ export class ActivityController {
     } catch (error) {
       return new APIResponse(
         Constants.statusCodes.INTERNAL_SERVER_ERROR,
-        Constants.messages.INTERNAL_SERVER_ERROR,
+        error,
         null,
       );
     }
