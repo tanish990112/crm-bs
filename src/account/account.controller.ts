@@ -12,6 +12,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { AuthGuard } from '@nestjs/passport';
@@ -23,6 +24,7 @@ import { APIResponse } from 'src/common/response';
 import { MyLogger } from 'src/logger/logger.service';
 import { CreateAccountDto, updateAccountDto } from './dto/account.dto';
 
+@ApiTags('Account')
 @Controller('account')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)

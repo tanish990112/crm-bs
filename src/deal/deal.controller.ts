@@ -12,6 +12,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { DealService } from './deal.service';
@@ -23,7 +24,8 @@ import { APIResponse } from 'src/common/response';
 import { MyLogger } from 'src/logger/logger.service';
 import { CreateDealDto, updateDealDto } from './dto/deal.dto';
 
-@Controller('Deal')
+@ApiTags('Deal')
+@Controller('deal')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class DealController {

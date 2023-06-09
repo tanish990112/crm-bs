@@ -13,6 +13,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { AuthGuard } from '@nestjs/passport';
@@ -24,8 +25,9 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { CreateUserDto, UpdateUserDto, UserDetailsDto } from './dto/users.dto';
 import { MyLogger } from 'src/logger/logger.service';
 
-@Controller('admin')
+@ApiTags('Admin')
 @Roles(Role.ADMIN)
+@Controller('admin')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class AdminController {

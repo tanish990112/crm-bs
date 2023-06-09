@@ -12,6 +12,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
   ActivityDetails,
@@ -27,6 +28,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { ActivityService } from './activity.service';
 import { MyLogger } from 'src/logger/logger.service';
 
+@ApiTags('Activity')
 @Controller('activity')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)

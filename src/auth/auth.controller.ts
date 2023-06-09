@@ -1,14 +1,3 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
-import { Role } from './role.enum';
-import { Roles } from './roles.decorator';
-import { RolesGuard } from './roles.guard';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Login } from 'src/common/common.dto';
@@ -16,8 +5,10 @@ import { Constants } from 'src/common/constants';
 import { APIResponse } from 'src/common/response';
 import { MyLogger } from 'src/logger/logger.service';
 import { UserDetailsDto } from 'src/admin/dto/users.dto';
-import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService, private myLogger: MyLogger) {}

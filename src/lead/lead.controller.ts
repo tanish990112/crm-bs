@@ -19,6 +19,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.enum';
 import { LeadService } from './lead.service';
@@ -31,6 +32,7 @@ import { LeadUpdateObject } from './lead.decorator';
 import { PaginateQuery } from '../common/common.dto';
 import { MyLogger } from 'src/logger/logger.service';
 
+@ApiTags('Lead')
 @Controller('lead')
 @ApiBearerAuth('Authorization')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
